@@ -1,6 +1,4 @@
-import React from 'react';
-
-function Toolbar(props) {
+function Toolbar() {
     return (
         <div>
 

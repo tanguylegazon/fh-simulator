@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-function Antenna(props) {
+function Antenna() {
     return (
         <div>
 

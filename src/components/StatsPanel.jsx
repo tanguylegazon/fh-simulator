@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-function StatsPanel(props) {
+function StatsPanel() {
     return (
         <div>
 

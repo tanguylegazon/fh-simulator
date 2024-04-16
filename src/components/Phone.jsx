@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-function Phone(props) {
+function Phone() {
     return (
         <div>
 

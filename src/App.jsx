@@ -1,8 +1,7 @@
-import * as React from 'react';
-import Toolbar from './components/Toolbar';
-import Phone from './components/Phone';
-import Antenna from './components/Antenna';
-import StatsPanel from './components/StatsPanel';
+import Toolbar from './components/Toolbar.jsx';
+import Phone from './components/Phone.jsx';
+import Antenna from './components/Antenna.jsx';
+import StatsPanel from './components/StatsPanel.jsx';
 
 function App() {
     return (
