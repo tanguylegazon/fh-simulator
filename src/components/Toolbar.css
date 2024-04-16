@@ -1,0 +1,8 @@
+.toolbar {
+    width: 60px;
+    height: calc(100vh - 2 * 22px);
+    margin: 22px;
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.2);
+}
