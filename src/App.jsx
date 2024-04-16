@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Toolbar from './components/Toolbar';
 import Phone from './components/Phone';
 import Antenna from './components/Antenna';
