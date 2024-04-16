@@ -1,6 +1,8 @@
+import './Toolbar.css';
+
 function Toolbar() {
     return (
-        <div>
+        <div className="toolbar">
 
         </div>
     );
