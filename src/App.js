@@ -1,11 +1,18 @@
 import React from 'react';
+import Toolbar from './components/Toolbar';
+import Phone from './components/Phone';
+import Antenna from './components/Antenna';
+import StatsPanel from './components/StatsPanel';
 
 function App() {
-  return (
-      <div className="App">
-        Hello, World!
-      </div>
-  );
+    return (
+        <div>
+            <Toolbar />
+            <Phone />
+            <Antenna />
+            <StatsPanel />
+        </div>
+    );
 }
 
 export default App;
