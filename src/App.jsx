@@ -6,10 +6,11 @@ import StatsPanel from './components/StatsPanel.jsx';
 function App() {
     return (
         <div>
-            <Toolbar />
-            <Phone />
-            <Antenna />
-            <StatsPanel />
+            <Toolbar>
+                <Phone/>
+            </Toolbar>
+            <Antenna/>
+            <StatsPanel/>
         </div>
     );
 }

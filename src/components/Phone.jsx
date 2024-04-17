@@ -1,8 +1,13 @@
+import Draggable from 'react-draggable';
+import './Phone.css';
+
 function Phone() {
     return (
-        <div>
-
-        </div>
+        <Draggable>
+            <div className="phone">
+                Phone
+            </div>
+        </Draggable>
     );
 }
 
