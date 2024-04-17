@@ -1,7 +1,7 @@
-import Toolbar from './components/Toolbar.jsx';
-import Phone from './components/Phone.jsx';
-import Antenna from './components/Antenna.jsx';
-import StatsPanel from './components/StatsPanel.jsx';
+import Toolbar from './components/Toolbar';
+import Antenna from './components/Antenna';
+import StatsPanel from './components/StatsPanel';
+import Phone from './components/Phone';
 
 function App() {
     return (

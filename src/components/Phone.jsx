@@ -3,7 +3,7 @@ import './Phone.css';
 
 function Phone() {
     return (
-        <Draggable>
+        <Draggable bounds="html">
             <div className="phone">
                 Phone
             </div>
