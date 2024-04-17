@@ -1,4 +1,5 @@
 .toolbar {
+    position: relative;
     width: fit-content;
     height: 80vh;
 
