@@ -5,7 +5,7 @@ import Phone from './components/Phone';
 
 function App() {
     const phone_number = 3;
-    const phones = Array(phone_number).fill(<Phone/>);
+    const phones = Array.from({length: phone_number}, (_, i) => <Phone key={i} index={phone_number - i}/>);
 
     return (
         <div>
