@@ -1,11 +1,11 @@
 import Draggable from 'react-draggable';
 import './Phone.css';
 
-function Phone() {
+function Phone({ index }) {
     return (
         <Draggable bounds="html">
             <div className="phone">
-                Phone
+                {`Phone ${index}`}
             </div>
         </Draggable>
     );
