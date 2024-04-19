@@ -1,0 +1,26 @@
+.div_graph {
+    position: fixed;
+    width: auto;
+    height: auto;
+    top: 0;
+    right: 0;
+    z-index: -1;
+}
+
+.table_graph {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 8px;
+}
+
+.th_graph {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 8px;
+}
+
+.td_graph {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 8px;
+}
