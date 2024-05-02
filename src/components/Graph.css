@@ -1,9 +1,8 @@
 .div_graph {
-    position: fixed;
+    position: absolute;
     width: auto;
-    height: auto;
     top: 0;
-    right: 0;
+    left: 85%;
     z-index: -1;
 }
 
@@ -11,16 +10,21 @@
     border: 1px solid black;
     border-collapse: collapse;
     padding: 8px;
+
+    table-layout: fixed;
 }
 
-.th_graph {
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding: 8px;
-}
-
+.th_graph,
 .td_graph {
     border: 1px solid black;
     border-collapse: collapse;
-    padding: 8px;
+    text-align: center;
+}
+
+.div_phone {
+    width: 60px;
+    height: 60px;
+
+    justify-content: center;
+    align-items: center;
 }
