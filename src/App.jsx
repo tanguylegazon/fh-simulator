@@ -2,6 +2,7 @@ import Toolbar from './components/Toolbar';
 import Antenna from './components/Antenna';
 import StatsPanel from './components/StatsPanel';
 import Phone from './components/Phone';
+import Graph from './components/Graph';
 
 function App() {
     const phone_number = 3;
@@ -15,6 +16,7 @@ function App() {
             </Toolbar>
             <Antenna/>
             <StatsPanel/>
+            <Graph/>
         </div>
     );
 }
