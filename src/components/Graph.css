@@ -1,30 +1,70 @@
 .div_graph {
-    position: absolute;
+    position: fixed;
+    top: 2%;
+    right: 1%;
+    height: auto;
+    width: 20%;
+
+    border: 1px solid black;
+    padding: 10px;
+    
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.2);
+
+}
+
+.graph_title {
+    font-size: larger;
+    font-style: oblique;
+    font-weight: 500;
+    text-align: center;
+}
+
+.div_table {
+    display: flex;
     width: auto;
-    top: 0;
-    left: 85%;
-    z-index: -1;
+    height: auto;
+    background-color: white;
+    padding: 5px;
+    border-radius: .5rem;
+    overflow-y: auto;
+}
+
+.div_table::-webkit-scrollbar {
+    width: 12px;
+}
+
+.div_table::-webkit-scrollbar-track {
+    background: #dcdcdc;
+    border-radius: .5rem;
+}
+
+.div_table::-webkit-scrollbar-thumb {
+    background: #696969;
+    border-radius: .5rem;
+}
+
+.div_table::-webkit-scrollbar-thumb:hover {
+    background: #2f4f4f;
 }
 
 .table_graph {
     border: 1px solid black;
     border-collapse: collapse;
     padding: 8px;
-
-    table-layout: fixed;
 }
 
 .th_graph,
 .td_graph {
     border: 1px solid black;
     border-collapse: collapse;
-    text-align: center;
 }
 
 .div_phone {
+    position: relative;
     width: 60px;
     height: 60px;
-
     justify-content: center;
     align-items: center;
 }
