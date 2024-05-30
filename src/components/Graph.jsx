@@ -3,28 +3,73 @@ import './Graph.css';
 import Phone from './Phone';
 
 function Graph() {
-    const phone_number = 3;
+    // Number of phones to display
+    const phone_number = 4;
+    // Create an array of Phone components
     const phones = Array.from({ length: phone_number }, (_, i) => <Phone key={i} index={i + 1} />);
-    const [timeSlots, setTimeSlots] = useState(['TS1']); // Exemple de time slots
-    
+    // List of frequency lists for each phone
+    const frequencyLists = [
+        ['F1', 'F2', 'F3'],
+        ['F1', 'F4', 'F5'],
+        ['F4', 'F6', 'F7'],
+        ['F2', 'F5', 'F8']
+    ];
+    // State to keep track of time slots
+    const [timeSlots, setTimeSlots] = useState(['TS1']);
+    // State to keep track of HSN values, initialized to empty strings
+    const [hsnValues, setHsnValues] = useState(['', '', '', '']);
+    // State to keep track of frequencies used in each time slot for each phone, initialized to 'X'
+    const [slotFrequencies, setSlotFrequencies] = useState([
+        ['X'],
+        ['X'],
+        ['X'],
+        ['X']
+    ]);
+
+    // Effect that runs every 5 seconds to update time slots and frequencies
     useEffect(() => {
         const interval = setInterval(() => {
-            // Generate a new time slot (TS2, TS3, ..., TSN)
             const newTimeSlot = `TS${timeSlots.length + 1}`;
 
-            // Update the time slots by adding the new time slot
+            // Determine new frequencies based on HSN values
+            let newFrequencies = frequencyLists.map((frequencies, index) => {
+                const hsnValue = parseInt(hsnValues[index % hsnValues.length], 10); // Parse HSN value as integer
+                if (hsnValue === 0) {
+                    // If HSN value is 0, use the frequency based on the current time slot index
+                    return frequencies[timeSlots.length % frequencies.length];
+                } else if (hsnValue >= 1 && hsnValue <= 63) {
+                    // If HSN value is between 1 and 63, select a random frequency from the list
+                    const randomIndex = Math.floor(Math.random() * frequencies.length);
+                    return frequencies[randomIndex];
+                } else {
+                    // If HSN value is invalid, use 'X'
+                    return 'X';
+                }
+            });
+
+            // Update time slots by adding the new time slot
             setTimeSlots((prevTimeSlots) => [...prevTimeSlots, newTimeSlot]);
-        }, 3000); // 3000 milliseconds = 3 seconds
+
+            // Update slot frequencies by adding the new frequencies for each phone
+            setSlotFrequencies((prevFrequencies) =>
+                prevFrequencies.map((frequencies, index) => [...frequencies, newFrequencies[index]])
+            );
+        }, 5000); // 5000 milliseconds = 5 seconds
 
         // Clean up the interval when the component is unmounted
         return () => clearInterval(interval);
-    }, [timeSlots]); // Add timeSlots as dependency
+    }, [timeSlots, frequencyLists, hsnValues]);
 
-    // Fonction pour générer une fréquence aléatoire
-    const getRandomFrequency = () => {
-        const frequencies = ['F1', 'F2', 'F3'];
-        const randomIndex = Math.floor(Math.random() * frequencies.length);
-        return frequencies[randomIndex];
+    // Handle changes to HSN input fields
+    const handleInputChange = (event, index) => {
+        const newHsnValues = [...hsnValues];
+        newHsnValues[index] = event.target.value;
+        setHsnValues(newHsnValues);
+    };
+
+    // Handle button click to validate HSN values
+    const handleButtonClick = (index) => {
+        alert(`HSN ${index + 1} is equal to ${hsnValues[index]}`);
     };
 
     return (
@@ -50,10 +95,9 @@ function Graph() {
                                         {phone}
                                     </div>
                                 </td>
-                                {timeSlots.map((ts, colIndex) => (
+                                {slotFrequencies[rowIndex].map((frequency, colIndex) => (
                                     <td key={colIndex} className='td_graph'>
-                                        {/* Generate a frequency */}
-                                        {getRandomFrequency()}
+                                        {frequency}
                                     </td>
                                 ))}
                             </tr>
@@ -61,6 +105,13 @@ function Graph() {
                     </tbody>
                 </table>
             </div>
+            {hsnValues.map((value, index) => (
+                <div className='HSN_value' key={index}>
+                    <p>HSN {index + 1}:</p>
+                    <input type="text" value={value} onChange={(e) => handleInputChange(e, index)} />
+                    <button onClick={() => handleButtonClick(index)}>Validate</button>
+                </div>
+            ))}
         </div>
     );
 }
