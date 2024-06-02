@@ -1,13 +1,10 @@
-import Draggable from 'react-draggable';
 import './Phone.css';
 
-function Phone({ index }) {
+function Phone({index}) {
     return (
-        <Draggable bounds="html">
-            <div className="phone">
-                {`Phone ${index}`}
-            </div>
-        </Draggable>
+        <div className="phone">
+            {`Phone ${index}`}
+        </div>
     );
 }
 
