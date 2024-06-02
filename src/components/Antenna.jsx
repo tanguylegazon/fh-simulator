@@ -1,12 +1,13 @@
+import React from 'react';
 import './Antenna.css';
 
-function Antenna() {
+const Antenna = () => {
     return (
-        <div className="div_antenna">
-            <img className="img_antenna" src="/src/pictures/antenna.png" alt="antenna" />
-            <div className='radar'></div>
+        <div className="antenna-area">
+            <div className="pulse pulse-1"></div>
+            <div className="pulse pulse-2"></div>
         </div>
     );
-}
+};
 
 export default Antenna;

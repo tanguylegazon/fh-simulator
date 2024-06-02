@@ -3,7 +3,7 @@ import './Phone.css';
 
 const Phone = ({numberOfPhones}) => {
     const phones = Array.from({length: numberOfPhones}, (_, index) => index + 1);
-    const radius = 150; // Adjust radius as needed
+    const radius = 222;
     const angleStep = (2 * Math.PI) / numberOfPhones;
 
     return (
@@ -22,7 +22,7 @@ const Phone = ({numberOfPhones}) => {
                             top: `${y}px`,
                         }}
                     >
-                        Phone {phone}
+                        {phone}
                     </div>
                 );
             })}
