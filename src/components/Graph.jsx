@@ -54,7 +54,7 @@ function Graph() {
             setSlotFrequencies((prevFrequencies) =>
                 prevFrequencies.map((frequencies, index) => [...frequencies, newFrequencies[index]])
             );
-        }, 5000); // 5000 milliseconds = 5 seconds
+        }, 2000);
 
         // Clean up the interval when the component is unmounted
         return () => clearInterval(interval);

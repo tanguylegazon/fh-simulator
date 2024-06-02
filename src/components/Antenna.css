@@ -4,40 +4,42 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-
-    width: 500px;
-    height: 500px;
-    justify-content: center;
-    align-items: center;
-
-    background-color: transparent;
-    border-radius: 50%;
-}
-
-.antenna {
     width: 60px;
     height: 60px;
-
-    background-image: url("../assets/antenna.png");
+    justify-content: center;
+    align-items: center;
+    background-image: url("../assets/antenna.png"); /* Assurez-vous que le chemin de l'image est correct */
     background-size: cover;
-}
-
-.radar {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    background-position: center;
     border-radius: 50%;
-    background: conic-gradient(rgba(0, 210, 255, 0.25) 0deg 60deg, transparent 0deg);
-    z-index: -1;
-
-    animation: rotate 5s linear infinite;
+    overflow: visible; /* Allow the pulse to expand beyond the boundaries */
 }
 
-@keyframes rotate {
-    from {
-      transform: rotate(0deg);
+.pulse {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(0, 210, 255, 0.25);
+    z-index: -1;
+    animation: pulse 2s infinite;
+}
+
+.pulse-1 {
+    animation-delay: 0s;
+}
+
+.pulse-2 {
+    animation-delay: 1.7s;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
     }
-    to {
-      transform: rotate(360deg);
+    100% {
+        transform: scale(4);
+        opacity: 0;
     }
-  }
+}
