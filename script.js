@@ -1,24 +1,39 @@
+/********************
+ * Global variables *
+ ********************/
 let chart;
 let intervalId;
 let timeSlotCounter = 0;
 let updateInterval = 1000; // 1 second
 let isPlaying = true;
 
+const graphWindowSize = 10;
+
+
+/*********************
+ * Document elements *
+ *********************/
 const numberPhonesInput = document.getElementById('number-phones');
 const numberFrequenciesInput = document.getElementById('number-frequencies');
 const speedInput = document.getElementById('speed');
 const playButton = document.getElementById('play-button');
 
-const numberOfPhones = parseInt(numberPhonesInput.value);
-const numberOfFrequencies = parseInt(numberFrequenciesInput.value);
-const simulationSpeed = parseFloat(speedInput.value);
+let numberOfPhones = parseInt(numberPhonesInput.value);
+let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
+let simulationSpeed = parseFloat(speedInput.value);
 
-startSimulation();
+
+/**************************
+ * Global event listeners *
+ **************************/
+document.addEventListener('DOMContentLoaded', startSimulation);
 
 numberPhonesInput.addEventListener('input', updateParameters);
 numberFrequenciesInput.addEventListener('input', updateParameters);
 speedInput.addEventListener('input', updateSpeed);
 playButton.addEventListener('click', togglePlayPause);
+
+
 
 function startSimulation() {
     if (intervalId) {
@@ -30,21 +45,21 @@ function startSimulation() {
     const ctx = document.getElementById('graph').getContext('2d');
 
     const graphData = [];
-    const graphLabels = Array.from({length: 10}, (_, i) => i + 1); // Initial 20 time slots
+    const graphLabels = Array.from({length: graphWindowSize}, (_, i) => i + 1); // Initial 20 time slots
 
     for (let i = 0; i < numberOfPhones; ++i) {
-        const phoneData = {
+        const graphLine = {
             label: `Phone ${i + 1}`,
             data: [],
             borderColor: getRandomColor(),
             fill: false
         };
 
-        for (let j = 0; j < 20; j++) {
-            phoneData.data.push(getFrequency(j, i, numberOfFrequencies));
+        for (let j = 0; j < graphWindowSize; ++j) {
+            graphLine.data.push(getFrequency(j, i, numberOfFrequencies));
         }
 
-        graphData.push(phoneData);
+        graphData.push(graphLine);
     }
 
     // Destroy previous chart if exists
@@ -73,17 +88,18 @@ function startSimulation() {
                         text: 'Frequency Band'
                     },
                     min: 1,
-                    max: numberOfFrequencies
+                    max: numberOfFrequencies,
+                    ticks: {
+                        stepSize: 1
+                    }
                 }
             }
         }
     });
 
-    // Initialize timeSlotCounter
-    timeSlotCounter = 20;
+     timeSlotCounter = 20;
 
-    // Add phones around the antenna
-    updatePhones(numberOfPhones);
+    updatePhonesDisplay();
 
     // Update the chart data periodically
     intervalId = setInterval(() => {
@@ -91,21 +107,20 @@ function startSimulation() {
     }, updateInterval); // Update interval based on speed
 }
 
-function updatePhones(numPhones) {
+function updatePhonesDisplay() {
     const phonesContainer = document.getElementById('phones-container');
     phonesContainer.innerHTML = '';
 
-    const containerWidth = phonesContainer.offsetWidth;
-    const containerHeight = phonesContainer.offsetHeight;
-    const radius = Math.min(containerWidth, containerHeight) * 0.4;
+    const phonesContainerHeight = phonesContainer.offsetHeight;
+    const radius = phonesContainerHeight * 0.4;
 
-    const angleStep = 360 / numPhones;
-    for (let i = 0; i < numPhones; i++) {
+    const angleStep = 360 / numberOfPhones;
+    for (let i = 0; i < numberOfPhones; ++i) {
         const phone = document.createElement('div');
         phone.classList.add('phone');
         phone.textContent = `${i + 1}`;
 
-        const angle = i * angleStep;
+        const angle = - 90 + i * angleStep;
         const x = radius * Math.cos((angle * Math.PI) / 180);
         const y = radius * Math.sin((angle * Math.PI) / 180);
 
@@ -115,26 +130,27 @@ function updatePhones(numPhones) {
 }
 
 function updateParameters() {
-    const numPhones = parseInt(document.getElementById('number-phones').value);
-    const numBands = parseInt(document.getElementById('number-frequencies').value);
+    numberOfPhones = parseInt(numberPhonesInput.value);
+    numberOfFrequencies = parseInt(numberFrequenciesInput.value);
+    simulationSpeed = parseFloat(speedInput.value);
 
     // Adjust the chart's y-axis max value
-    chart.options.scales.y.max = numBands;
+    chart.options.scales.y.max = numberOfFrequencies;
 
-    // Adjust the datasets
-    while (chart.data.datasets.length > numPhones) {
+        // Adjust the datasets
+    while (chart.data.datasets.length > numberOfPhones) {
         chart.data.datasets.pop();
     }
 
-    while (chart.data.datasets.length < numPhones) {
+    while (chart.data.datasets.length < numberOfPhones) {
         const phoneIndex = chart.data.datasets.length;
-        const phoneData = {
+        const graphLine = {
             label: `Phone ${phoneIndex + 1}`,
             data: Array(20).fill(null),
             borderColor: getRandomColor(),
             fill: false
         };
-        chart.data.datasets.push(phoneData);
+        chart.data.datasets.push(graphLine);
     }
 
     // Ensure current datasets are updated
@@ -149,7 +165,8 @@ function updateParameters() {
 
     // Apply new settings immediately
     chart.update();
-    updatePhones(numPhones);
+    updatePhonesDisplay();
+
 }
 
 function updateSpeed() {
@@ -165,12 +182,9 @@ function updateGraph() {
         clearInterval(intervalId);
     }
 
-    const numPhones = parseInt(document.getElementById('number-phones').value);
-    const numBands = parseInt(document.getElementById('number-frequencies').value);
-
     if (isPlaying) {
         intervalId = setInterval(() => {
-            updateChartData(chart, numPhones, numBands);
+            updateChartData(chart, numberOfPhones, numberOfFrequencies);
         }, updateInterval); // Update interval based on speed
     }
 }
