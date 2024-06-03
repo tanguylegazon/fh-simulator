@@ -4,7 +4,6 @@ let timeSlotCounter = 0;
 let updateInterval = 1000;
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Include Chart.js library
     document.getElementById('simulateBtn').addEventListener('click', startSimulation);
 
     document.getElementById('number-phones').addEventListener('input', updateParameters);
@@ -81,10 +80,36 @@ function startSimulation() {
     // Initialize timeSlotCounter
     timeSlotCounter = 20;
 
+    // Add phones around the antenna
+    updatePhones(numPhones);
+
     // Update the chart data periodically
     intervalId = setInterval(() => {
         updateChartData(chart, numPhones, numBands, hsn);
     }, updateInterval); // Update interval based on speed
+}
+
+function updatePhones(numPhones) {
+    const phonesContainer = document.getElementById('phones-container');
+    phonesContainer.innerHTML = '';
+
+    const containerWidth = phonesContainer.offsetWidth;
+    const containerHeight = phonesContainer.offsetHeight;
+    const radius = Math.min(containerWidth, containerHeight) * 0.4;
+
+    const angleStep = 360 / numPhones;
+    for (let i = 0; i < numPhones; i++) {
+        const phone = document.createElement('div');
+        phone.classList.add('phone');
+        phone.textContent = `Phone ${i + 1}`;
+
+        const angle = i * angleStep;
+        const x = radius * Math.cos((angle * Math.PI) / 180);
+        const y = radius * Math.sin((angle * Math.PI) / 180);
+
+        phone.style.transform = `translate(${x}px, ${y}px)`;
+        phonesContainer.appendChild(phone);
+    }
 }
 
 function updateParameters() {
@@ -121,6 +146,7 @@ function updateParameters() {
 
     // Apply new settings immediately
     chart.update();
+    updatePhones(numPhones);
 }
 
 function updateSpeed() {
