@@ -3,19 +3,14 @@ let intervalId;
 let timeSlotCounter = 0;
 let updateInterval = 1000;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Include Chart.js library
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-    script.onload = () => {
-        document.getElementById('simulateBtn').addEventListener('click', startSimulation);
+    document.getElementById('simulateBtn').addEventListener('click', startSimulation);
 
-        document.getElementById('numPhones').addEventListener('input', updateParameters);
-        document.getElementById('numBands').addEventListener('input', updateParameters);
-        document.getElementById('hsn').addEventListener('change', updateParameters);
-        document.getElementById('speed').addEventListener('input', updateSpeed);
-    };
-    document.head.appendChild(script);
+    document.getElementById('number-phones').addEventListener('input', updateParameters);
+    document.getElementById('number-frequencies').addEventListener('input', updateParameters);
+    document.getElementById('number-hsn').addEventListener('change', updateParameters);
+    document.getElementById('speed').addEventListener('input', updateSpeed);
 });
 
 function startSimulation() {
@@ -23,9 +18,9 @@ function startSimulation() {
         clearInterval(intervalId);
     }
 
-    const numPhones = parseInt(document.getElementById('numPhones').value);
-    const numBands = parseInt(document.getElementById('numBands').value);
-    const hsn = parseInt(document.getElementById('hsn').value);
+    const numPhones = parseInt(document.getElementById('number-phones').value);
+    const numBands = parseInt(document.getElementById('number-frequencies').value);
+    const hsn = parseInt(document.getElementById('number-hsn').value);
     const speed = parseFloat(document.getElementById('speed').value);
 
     updateInterval = 1000 / speed;
@@ -93,9 +88,9 @@ function startSimulation() {
 }
 
 function updateParameters() {
-    const numPhones = parseInt(document.getElementById('numPhones').value);
-    const numBands = parseInt(document.getElementById('numBands').value);
-    const hsn = parseInt(document.getElementById('hsn').value);
+    const numPhones = parseInt(document.getElementById('number-phones').value);
+    const numBands = parseInt(document.getElementById('number-frequencies').value);
+    const hsn = parseInt(document.getElementById('number-hsn').value);
 
     // Adjust the chart's y-axis max value
     chart.options.scales.y.max = numBands;
@@ -136,9 +131,9 @@ function updateSpeed() {
         clearInterval(intervalId);
     }
 
-    const numPhones = parseInt(document.getElementById('numPhones').value);
-    const numBands = parseInt(document.getElementById('numBands').value);
-    const hsn = parseInt(document.getElementById('hsn').value);
+    const numPhones = parseInt(document.getElementById('number-phones').value);
+    const numBands = parseInt(document.getElementById('number-frequencies').value);
+    const hsn = parseInt(document.getElementById('number-hsn').value);
 
     intervalId = setInterval(() => {
         updateChartData(chart, numPhones, numBands, hsn);

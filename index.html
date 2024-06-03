@@ -2,22 +2,23 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
     <title>Frequency Hopping Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
 <body>
-<script src="script.js" async></script>
 <div class="container">
     <h1>Frequency Hopping Simulator</h1>
     <div class="controls">
-        <label for="numPhones">Number of Phones:</label>
-        <input type="number" id="numPhones" min="1" max="10" value="3">
+        <label for="number-phones">Number of phones:</label>
+        <input type="number" id="number-phones" min="1" max="10" value="3">
 
-        <label for="numBands">Number of Frequency Bands:</label>
-        <input type="number" id="numBands" min="1" max="20" value="5">
+        <label for="number-frequencies">Number of Frequency Bands:</label>
+        <input type="number" id="number-frequencies" min="1" max="20" value="5">
 
-        <label for="hsn">HSN:</label>
-        <select id="hsn">
+        <label for="number-hsn">HSN:</label>
+        <select id="number-hsn">
             <option value="0">HSN0</option>
             <option value="1">HSN1</option>
             <option value="2">HSN2</option>
@@ -25,7 +26,7 @@
         </select>
 
         <label for="speed">Speed:</label>
-        <input type="range" id="speed" min="0.5" max="10" step="0.5" value="1"
+        <input type="range" id="speed" min="1" max="10" step="1" value="1"
                oninput="this.nextElementSibling.value = this.value">
         <output>1</output>
 
@@ -33,6 +34,5 @@
     </div>
     <canvas id="frequencyChart"></canvas>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 </body>
 </html>
