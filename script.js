@@ -143,6 +143,8 @@ function updateParameters() {
         dataset.label = `Phone ${phoneIndex + 1}`;
     });
 
+    updateGraph();
+
     // Apply new settings immediately
     chart.update();
     updatePhones(numPhones);
@@ -152,6 +154,11 @@ function updateSpeed() {
     const speed = parseFloat(document.getElementById('speed').value);
     updateInterval = 1000 / speed;
 
+    updateGraph();
+
+}
+
+function updateGraph() {
     if (intervalId) {
         clearInterval(intervalId);
     }
