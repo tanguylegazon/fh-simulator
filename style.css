@@ -1,19 +1,61 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: sans-serif;
     height: 100vh;
+    width: 100vw;
     margin: 0;
 }
 
 .container {
-    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 600px;
+    background-color: aquamarine;
+}
+
+.toolbar {
+    height: 40px;
+    background-color: rosybrown;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background-color: darkred;
+}
+.container-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    width: 50%;
+}
+
+.container-right {
+    background-color: blue;
+    width: 50%;
+}
+
+.antenna-area {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/img/antenna.png"); /* Assurez-vous que le chemin de l'image est correct */
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    overflow: visible; /* Allow the pulse to expand beyond the boundaries */
 }
 
 .controls {

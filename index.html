@@ -9,8 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Frequency Hopping Simulator</h1>
-    <div class="controls">
+    <div class="toolbar">
         <label for="number-phones">Number of phones:</label>
         <input type="number" id="number-phones" min="1" max="10" value="3">
 
@@ -32,7 +31,25 @@
 
         <button id="simulateBtn">Simulate</button>
     </div>
-    <canvas id="frequencyChart"></canvas>
+
+    <div class="content">
+        <div class="container-left">
+            <div id="antenna">
+                <img id="antenna-image" src="/img/antenna.png" alt="antenna"/>
+
+                <div class="radar"></div>
+
+                <div class="antenna-area">
+                    <div class="pulse pulse-1"></div>
+                    <div class="pulse pulse-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-right">
+            <canvas id="frequencyChart"></canvas>
+        </div>
+    </div>
 </div>
 </body>
 </html>
