@@ -11,7 +11,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    padding: 20px;
+    padding: 25px;
 }
 
 .toolbar {
@@ -72,7 +72,7 @@ body {
 }
 
 .pulse-2 {
-    animation-delay: 1.7s;
+    animation-delay: -.2s;
 }
 
 #phones-container {
@@ -112,7 +112,7 @@ body {
     font-family: monospace;
 }
 
-#frequencyChart {
+#graph {
     width: 100%;
     height: 400px;
 }
