@@ -6,7 +6,6 @@ let intervalId;
 let timeSlotCounter = 0;
 let updateInterval = 1000; // 1 second
 let isPlaying = true;
-
 const graphWindowSize = 10;
 
 
@@ -22,56 +21,68 @@ let numberOfPhones = parseInt(numberPhonesInput.value);
 let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
 let simulationSpeed = parseFloat(speedInput.value);
 
+const colorPalette = [
+    "#36A2EB", // Blue
+    "#FF6384", // Red
+    "#4BC0C0", // Cyan
+    "#FF9F40", // Orange
+    "#9966FF", // Purple
+    "#FFCD56", // Yellow
+    "#C9CBCF", // Gray
+    "#66E8FF", // Sky Blue
+    "#FF99DF", // Pink
+    "#99FF99"  // Lime Green
+];
+
 
 /**************************
  * Global event listeners *
  **************************/
 document.addEventListener('DOMContentLoaded', startSimulation);
-
 numberPhonesInput.addEventListener('input', updateParameters);
 numberFrequenciesInput.addEventListener('input', updateParameters);
 speedInput.addEventListener('input', updateSpeed);
 playButton.addEventListener('click', togglePlayPause);
 
-
-
+// Start simulation
 function startSimulation() {
-    if (intervalId) {
-        clearInterval(intervalId);
-    }
-
+    clearInterval(intervalId);
     updateInterval = 1000 / simulationSpeed;
-
     const ctx = document.getElementById('graph').getContext('2d');
-
     const graphData = [];
-    const graphLabels = Array.from({length: graphWindowSize}, (_, i) => i + 1); // Initial 20 time slots
+    const graphLabels = Array.from({length: graphWindowSize}, (_, i) => i + 1);
 
     for (let i = 0; i < numberOfPhones; ++i) {
-        const graphLine = {
-            label: `Phone ${i + 1}`,
-            data: [],
-            borderColor: getColor(i),
-            fill: false
-        };
-
-        for (let j = 0; j < graphWindowSize; ++j) {
-            graphLine.data.push(getFrequency(j, i, numberOfFrequencies));
-        }
-
-        graphData.push(graphLine);
+        graphData.push(createGraphLine(i));
     }
 
-    // Destroy previous chart if exists
     if (chart) {
         chart.destroy();
     }
 
-    chart = new Chart(ctx, {
+    chart = createChart(ctx, graphLabels, graphData);
+    timeSlotCounter = graphWindowSize;
+    updatePhonesDisplay();
+    intervalId = setInterval(updateChartData, updateInterval);
+}
+
+// Create graph line
+function createGraphLine(phoneIndex) {
+    return {
+        label: `Phone ${phoneIndex + 1}`,
+        data: Array.from({length: graphWindowSize}, (_, i) => getFrequency(i, phoneIndex)),
+        borderColor: getColor(phoneIndex),
+        fill: false
+    };
+}
+
+// Create chart
+function createChart(ctx, labels, data) {
+    return new Chart(ctx, {
         type: 'line',
         data: {
-            labels: graphLabels,
-            datasets: graphData
+            labels: labels,
+            datasets: data
         },
         options: {
             animation: false,
@@ -96,39 +107,28 @@ function startSimulation() {
             }
         }
     });
-
-     timeSlotCounter = 20;
-
-    updatePhonesDisplay();
-
-    // Update the chart data periodically
-    intervalId = setInterval(() => {
-        updateChartData(chart, numberOfPhones, numberOfFrequencies);
-    }, updateInterval); // Update interval based on speed
 }
 
+// Update phones display
 function updatePhonesDisplay() {
     const phonesContainer = document.getElementById('phones-container');
     phonesContainer.innerHTML = '';
-
-    const phonesContainerHeight = phonesContainer.offsetHeight;
-    const radius = phonesContainerHeight * 0.4;
-
+    const radius = phonesContainer.offsetHeight * 0.4;
     const angleStep = 360 / numberOfPhones;
+
     for (let i = 0; i < numberOfPhones; ++i) {
         const phone = document.createElement('div');
         phone.classList.add('phone');
         phone.textContent = `${i + 1}`;
-
-        const angle = - 90 + i * angleStep;
+        const angle = -90 + i * angleStep;
         const x = radius * Math.cos((angle * Math.PI) / 180);
         const y = radius * Math.sin((angle * Math.PI) / 180);
-
         phone.style.transform = `translate(${x}px, ${y}px)`;
         phonesContainer.appendChild(phone);
     }
 }
 
+// Update parameters
 function updateParameters() {
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
@@ -166,91 +166,52 @@ function updateParameters() {
     updatePhonesDisplay();
 }
 
-
+// Update speed
 function updateSpeed() {
-    const speed = parseFloat(document.getElementById('speed').value);
-    updateInterval = 1000 / speed;
-
+    simulationSpeed = parseFloat(speedInput.value);
+    updateInterval = 1000 / simulationSpeed;
     updateGraph();
-
 }
 
+// Update graph
 function updateGraph() {
-    if (intervalId) {
-        clearInterval(intervalId);
-    }
-
+    clearInterval(intervalId);
     if (isPlaying) {
-        intervalId = setInterval(() => {
-            updateChartData(chart, numberOfPhones, numberOfFrequencies);
-        }, updateInterval); // Update interval based on speed
+        intervalId = setInterval(updateChartData, updateInterval);
     }
 }
 
+// Toggle play/pause
 function togglePlayPause() {
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    if (isPlaying) {
-        clearInterval(intervalId);
-        playPauseBtn.textContent = 'Play';
-    } else {
-        const numPhones = parseInt(document.getElementById('number-phones').value);
-        const numBands = parseInt(document.getElementById('number-frequencies').value);
-        intervalId = setInterval(() => {
-            updateChartData(chart, numPhones, numBands);
-        }, updateInterval);
-        playPauseBtn.textContent = 'Pause';
-    }
     isPlaying = !isPlaying;
+    playButton.textContent = isPlaying ? 'Pause' : 'Play';
+    updateGraph();
 }
 
-function getFrequency(timeSlot, phoneIndex, numBands) {
-    return (timeSlot + phoneIndex) % numBands + 1;
+// Get frequency
+function getFrequency(timeSlot, phoneIndex) {
+    return (timeSlot + phoneIndex) % numberOfFrequencies + 1;
 }
 
-function updateChartData(chart, numPhones, numBands) {
+// Update chart data
+function updateChartData() {
     chart.data.labels.push(timeSlotCounter + 1);
-    chart.data.labels.shift(); // Keep only the latest 20 time slots
+    chart.data.labels.shift();
 
     chart.data.datasets.forEach((dataset, phoneIndex) => {
-        if (phoneIndex < numPhones) {
-            dataset.data.push(getFrequency(timeSlotCounter, phoneIndex, numBands));
-            dataset.data.shift(); // Keep only the latest 20 data points
+        if (phoneIndex < numberOfPhones) {
+            dataset.data.push(getFrequency(timeSlotCounter, phoneIndex));
+            dataset.data.shift();
         } else {
-            dataset.data = []; // Clear data for phones that are no longer present
+            dataset.data = [];
         }
     });
 
-    while (chart.data.datasets.length < numPhones) {
-        const phoneIndex = chart.data.datasets.length;
-        const phoneData = {
-            label: `Phone ${phoneIndex + 1}`,
-            data: Array.from({length: 20}, (_, i) => getFrequency(timeSlotCounter - 19 + i, phoneIndex, numBands)),
-            borderColor: getColor(phoneIndex),
-            fill: false
-        };
-        chart.data.datasets.push(phoneData);
-    }
-
-    chart.options.scales.y.max = numBands;
-
-    timeSlotCounter++; // Increment the time slot counter
-
-    chart.update('none'); // Prevent animation during update
+    timeSlotCounter++;
+    chart.update('none');
 }
 
-const colorPalette = [
-    "#36A2EB",
-    "#FF6384",
-    "#4BC0C0",
-    "#FF9F40",
-    "#9966FF",
-    "#FFCD56",
-    "#C9CBCF",
-    "#66E8ff",
-    "#FF99DF",
-    "#99FF99"
-];
-
+// Get color
 function getColor(phoneIndex) {
     return colorPalette[phoneIndex % colorPalette.length];
 }
