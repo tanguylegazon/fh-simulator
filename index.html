@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Frequency Hopping Simulator</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script src="script.js" async></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
 <body>
@@ -21,7 +21,7 @@
                oninput="this.nextElementSibling.value = this.value">
         <output>1</output>
 
-        <button id="playPauseBtn">Pause</button>
+        <button id="play-button">Pause</button>
     </div>
 
     <div class="content">
@@ -36,7 +36,7 @@
         </div>
 
         <div class="container-right">
-            <canvas id="frequencyChart"></canvas>
+            <canvas id="graph"></canvas>
         </div>
     </div>
 </div>
