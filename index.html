@@ -26,9 +26,8 @@
 
         <div class="speed-slider">
             <label for="speed">Speed:</label>
-            <input type="range" id="speed" min="0" max="10" step="1" value="1"
-                   oninput="this.nextElementSibling.value = Number(this.value) === 0 ? 'x0.5' : 'x' + this.value">
-            <output>x1</output>
+            <input type="range" id="speed" min="0" max="10" step="1" value="1">
+            <div id="speed-output">d</div>
         </div>
 
         <button id="play-button">Pause</button>

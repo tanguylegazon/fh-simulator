@@ -28,13 +28,15 @@ let isPlaying = true;
  *********************/
 const numberPhonesInput = document.getElementById('number-phones');
 const numberFrequenciesInput = document.getElementById('number-frequencies');
-const speedInput = document.getElementById('speed');
+const speedSlider = document.getElementById('speed');
+const speedOutput = document.getElementById('speed-output');
 const playButton = document.getElementById('play-button');
+
+speedOutput.textContent = speedSlider.value;
 
 let numberOfPhones = parseInt(numberPhonesInput.value);
 let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
-let simulationSpeed = parseFloat(speedInput.value);
-
+let simulationSpeed = parseFloat(speedSlider.value);
 
 /**************************
  * Global event listeners *
@@ -42,7 +44,7 @@ let simulationSpeed = parseFloat(speedInput.value);
 document.addEventListener('DOMContentLoaded', startSimulation);
 numberPhonesInput.addEventListener('input', updateParameters);
 numberFrequenciesInput.addEventListener('input', updateParameters);
-speedInput.addEventListener('input', updateParameters);
+speedSlider.addEventListener('input', updateParameters);
 playButton.addEventListener('click', togglePlayPause);
 document.addEventListener('keydown', function (event) {
     if (event.code === 'Space') {
@@ -163,7 +165,8 @@ function updatePhonesDisplay() {
 function updateParameters() {
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
-    simulationSpeed = parseFloat(speedInput.value);
+    simulationSpeed = parseFloat(speedSlider.value);
+    speedOutput.textContent = `${simulationSpeed}x`;
 
     updateInterval = defaultUpdateInterval / simulationSpeed;
 
