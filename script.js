@@ -1,12 +1,26 @@
 /********************
  * Global variables *
  ********************/
+const graphWindowSize = 10;
+const defaultUpdateInterval = 1000; // 1 second
+const colorPalette = [
+    "#36A2EB", // Blue
+    "#FF6384", // Red
+    "#4BC0C0", // Cyan
+    "#FF9F40", // Orange
+    "#9966FF", // Purple
+    "#FFCD56", // Yellow
+    "#C9CBCF", // Gray
+    "#66E8FF", // Sky Blue
+    "#FF99DF", // Pink
+    "#99FF99"  // Lime Green
+];
+
 let chart;
 let intervalId;
+let updateInterval;
 let timeSlotCounter = 0;
-let updateInterval = 1000; // 1 second
 let isPlaying = true;
-const graphWindowSize = 10;
 
 
 /*********************
@@ -21,19 +35,6 @@ let numberOfPhones = parseInt(numberPhonesInput.value);
 let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
 let simulationSpeed = parseFloat(speedInput.value);
 
-const colorPalette = [
-    "#36A2EB", // Blue
-    "#FF6384", // Red
-    "#4BC0C0", // Cyan
-    "#FF9F40", // Orange
-    "#9966FF", // Purple
-    "#FFCD56", // Yellow
-    "#C9CBCF", // Gray
-    "#66E8FF", // Sky Blue
-    "#FF99DF", // Pink
-    "#99FF99"  // Lime Green
-];
-
 
 /**************************
  * Global event listeners *
@@ -44,29 +45,35 @@ numberFrequenciesInput.addEventListener('input', updateParameters);
 speedInput.addEventListener('input', updateSpeed);
 playButton.addEventListener('click', togglePlayPause);
 
-// Start simulation
+/**
+ * Starts the simulation.
+ */
 function startSimulation() {
     clearInterval(intervalId);
-    updateInterval = 1000 / simulationSpeed;
-    const ctx = document.getElementById('graph').getContext('2d');
+    updateInterval = defaultUpdateInterval / simulationSpeed;
+    const context = document.getElementById('graph').getContext('2d');
     const graphData = [];
     const graphLabels = Array.from({length: graphWindowSize}, (_, i) => i + 1);
 
-    for (let i = 0; i < numberOfPhones; ++i) {
-        graphData.push(createGraphLine(i));
+    for (let phoneIndex = 0; phoneIndex < numberOfPhones; ++phoneIndex) {
+        graphData.push(createGraphLine(phoneIndex));
     }
 
     if (chart) {
         chart.destroy();
     }
 
-    chart = createChart(ctx, graphLabels, graphData);
+    chart = createChart(context, graphLabels, graphData);
     timeSlotCounter = graphWindowSize;
     updatePhonesDisplay();
     intervalId = setInterval(updateChartData, updateInterval);
 }
 
-// Create graph line
+/**
+ * Creates a graph line for a phone.
+ * @param {number} phoneIndex - The index of the phone.
+ * @returns {Object} - The graph line object.
+ */
 function createGraphLine(phoneIndex) {
     return {
         label: `Phone ${phoneIndex + 1}`,
@@ -76,9 +83,15 @@ function createGraphLine(phoneIndex) {
     };
 }
 
-// Create chart
-function createChart(ctx, labels, data) {
-    return new Chart(ctx, {
+/**
+ * Creates a chart.
+ * @param {CanvasRenderingContext2D} context - The canvas rendering context.
+ * @param {Array} labels - The labels for the x-axis.
+ * @param {Array} data - The data for the chart.
+ * @returns {Chart} - The chart object.
+ */
+function createChart(context, labels, data) {
+    return new Chart(context, {
         type: 'line',
         data: {
             labels: labels,
@@ -109,18 +122,20 @@ function createChart(ctx, labels, data) {
     });
 }
 
-// Update phones display
+/**
+ * Updates the phones display.
+ */
 function updatePhonesDisplay() {
     const phonesContainer = document.getElementById('phones-container');
     phonesContainer.innerHTML = '';
     const radius = phonesContainer.offsetHeight * 0.4;
     const angleStep = 360 / numberOfPhones;
 
-    for (let i = 0; i < numberOfPhones; ++i) {
+    for (let phoneIndex = 0; phoneIndex < numberOfPhones; ++phoneIndex) {
         const phone = document.createElement('div');
         phone.classList.add('phone');
-        phone.textContent = `${i + 1}`;
-        const angle = -90 + i * angleStep;
+        phone.textContent = `${phoneIndex + 1}`;
+        const angle = -90 + phoneIndex * angleStep;
         const x = radius * Math.cos((angle * Math.PI) / 180);
         const y = radius * Math.sin((angle * Math.PI) / 180);
         phone.style.transform = `translate(${x}px, ${y}px)`;
@@ -128,7 +143,9 @@ function updatePhonesDisplay() {
     }
 }
 
-// Update parameters
+/**
+ * Updates the simulation parameters.
+ */
 function updateParameters() {
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
@@ -166,14 +183,18 @@ function updateParameters() {
     updatePhonesDisplay();
 }
 
-// Update speed
+/**
+ * Updates the simulation speed.
+ */
 function updateSpeed() {
     simulationSpeed = parseFloat(speedInput.value);
     updateInterval = 1000 / simulationSpeed;
     updateGraph();
 }
 
-// Update graph
+/**
+ * Updates the graph.
+ */
 function updateGraph() {
     clearInterval(intervalId);
     if (isPlaying) {
@@ -181,19 +202,19 @@ function updateGraph() {
     }
 }
 
-// Toggle play/pause
-function togglePlayPause() {
-    isPlaying = !isPlaying;
-    playButton.textContent = isPlaying ? 'Pause' : 'Play';
-    updateGraph();
-}
-
-// Get frequency
+/**
+ * Calculates the frequency for a given time slot and phone index.
+ * @param {number} timeSlot - The time slot.
+ * @param {number} phoneIndex - The index of the phone.
+ * @returns {number} - The frequency.
+ */
 function getFrequency(timeSlot, phoneIndex) {
     return (timeSlot + phoneIndex) % numberOfFrequencies + 1;
 }
 
-// Update chart data
+/**
+ * Updates the chart data.
+ */
 function updateChartData() {
     chart.data.labels.push(timeSlotCounter + 1);
     chart.data.labels.shift();
@@ -207,11 +228,24 @@ function updateChartData() {
         }
     });
 
-    timeSlotCounter++;
+    ++timeSlotCounter;
     chart.update('none');
 }
 
-// Get color
+/**
+ * Toggles play/pause.
+ */
+function togglePlayPause() {
+    isPlaying = !isPlaying;
+    playButton.textContent = isPlaying ? 'Pause' : 'Play';
+    updateGraph();
+}
+
+/**
+ * Gets the color for a phone.
+ * @param {number} phoneIndex - The index of the phone.
+ * @returns {string} - The color.
+ */
 function getColor(phoneIndex) {
     return colorPalette[phoneIndex % colorPalette.length];
 }
