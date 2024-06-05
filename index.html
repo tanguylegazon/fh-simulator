@@ -10,16 +10,26 @@
 <body>
 <div class="container">
     <div class="toolbar">
-        <label for="number-phones">Number of phones:</label>
-        <input type="number" id="number-phones" min="1" max="10" value="3">
+        <div class="counter">
+            <label for="nb-phones" class="visually-hidden">Phones:</label>
+            <button class="counter-decrease">−</button>
+            <input id="nb-phones" inputmode="numeric" value="3" readonly/>
+            <button class="counter-increase">+</button>
+        </div>
 
-        <label for="number-frequencies">Number of Frequency Bands:</label>
-        <input type="number" id="number-frequencies" min="1" max="20" value="5">
+        <div class="counter">
+            <label for="nb-frequencies" class="visually-hidden">Frequency Bands:</label>
+            <button class="counter-decrease">−</button>
+            <input id="nb-frequencies" inputmode="numeric" value="5" readonly/>
+            <button class="counter-increase">+</button>
+        </div>
 
-        <label for="speed">Speed:</label>
-        <input type="range" id="speed" min="1" max="10" step="1" value="2"
-               oninput="this.nextElementSibling.value = this.value">
-        <output>1</output>
+        <div class="speed-slider">
+            <label for="speed">Speed:</label>
+            <input type="range" id="speed" min="0" max="10" step="1" value="1"
+                   oninput="this.nextElementSibling.value = Number(this.value) === 0 ? 'x0.5' : 'x' + this.value">
+            <output>x1</output>
+        </div>
 
         <button id="play-button">Pause</button>
     </div>

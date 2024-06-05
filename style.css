@@ -1,9 +1,67 @@
+:root {
+    --input-selectable-color: #86868b;
+    --input-selected-color: #007AFF;
+    --button-color: #E5EBF1;
+    --button-color-hover: #C9D8E8;
+    --label-button-color: #E0EFFF;
+    --button-success-color: #34C759;
+
+    --short-transition-duration: 70ms;
+    --long-transition-duration: 120ms;
+}
+
 body {
     font-family: sans-serif;
     height: 100vh;
     width: 100vw;
     margin: 0;
 }
+
+input, button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--input-selectable-color);
+    font-size: 1em;
+}
+
+button {
+    background-color: var(--button-color);
+    cursor: pointer;
+    font-family: sans-serif;
+    color: black;
+    transition: background-color var(--short-transition-duration) ease;
+}
+
+button:hover {
+    background-color: var(--button-color-hover);
+}
+
+input:focus {
+    outline: none;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 120px;
+    height: 6px;
+    background: #B9C4CDFF;
+    border-radius: 5px;
+    padding: 0;
+    border: none;
+}
+
+
+input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: white;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: #4E4f55 0 0 18px -4px;
+}
+
 
 .container {
     display: flex;
@@ -15,9 +73,45 @@ body {
 }
 
 .toolbar {
-    height: 40px;
-    background-color: rosybrown;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
 }
+
+.counter {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+}
+
+.counter .counter-decrease {
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+}
+
+.counter input {
+    position: relative;
+    width: 3ch;
+    text-align: center;
+    border-radius: 0;
+    z-index: 1;
+}
+
+.counter .counter-increase {
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+}
+
+.speed-slider output {
+display: inline-block;
+    width: 3ch;
+
+}
+
+
+
+
 
 .content {
     display: flex;
