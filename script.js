@@ -51,7 +51,7 @@ function startSimulation() {
         const graphLine = {
             label: `Phone ${i + 1}`,
             data: [],
-            borderColor: getRandomColor(),
+            borderColor: getColor(i),
             fill: false
         };
 
@@ -147,7 +147,7 @@ function updateParameters() {
         const graphLine = {
             label: `Phone ${phoneIndex + 1}`,
             data: Array(graphWindowSize).fill(null),
-            borderColor: getRandomColor(),
+            borderColor: getColor(phoneIndex),
             fill: false
         };
         chart.data.datasets.push(graphLine);
@@ -225,7 +225,7 @@ function updateChartData(chart, numPhones, numBands) {
         const phoneData = {
             label: `Phone ${phoneIndex + 1}`,
             data: Array.from({length: 20}, (_, i) => getFrequency(timeSlotCounter - 19 + i, phoneIndex, numBands)),
-            borderColor: getRandomColor(),
+            borderColor: getColor(phoneIndex),
             fill: false
         };
         chart.data.datasets.push(phoneData);
@@ -238,11 +238,19 @@ function updateChartData(chart, numPhones, numBands) {
     chart.update('none'); // Prevent animation during update
 }
 
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+const colorPalette = [
+    "#36A2EB",
+    "#FF6384",
+    "#4BC0C0",
+    "#FF9F40",
+    "#9966FF",
+    "#FFCD56",
+    "#C9CBCF",
+    "#66E8ff",
+    "#FF99DF",
+    "#99FF99"
+];
+
+function getColor(phoneIndex) {
+    return colorPalette[phoneIndex % colorPalette.length];
 }
