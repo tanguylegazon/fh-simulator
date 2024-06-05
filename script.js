@@ -1,7 +1,7 @@
 /********************
  * Global variables *
  ********************/
-const graphWindowSize = 10;
+const graphWindowSize = 15;
 const defaultUpdateInterval = 1000; // 1 second
 const colorPalette = [
     "#36A2EB", // Blue
@@ -126,7 +126,7 @@ function createChart(context, labels, data) {
                     min: 0.8,
                     max: numberOfFrequencies + 0.2,
                     ticks: {
-                        callback: function (value, index, values) {
+                        callback: function (value) {
                             return Number.isInteger(value) ? value : null;
                         }
                     }
