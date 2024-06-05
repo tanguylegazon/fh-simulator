@@ -137,7 +137,7 @@ function updateParameters() {
     // Adjust the chart's y-axis max value
     chart.options.scales.y.max = numberOfFrequencies;
 
-        // Adjust the datasets
+    // Adjust the datasets
     while (chart.data.datasets.length > numberOfPhones) {
         chart.data.datasets.pop();
     }
@@ -146,19 +146,17 @@ function updateParameters() {
         const phoneIndex = chart.data.datasets.length;
         const graphLine = {
             label: `Phone ${phoneIndex + 1}`,
-            data: Array(20).fill(null),
+            data: Array(graphWindowSize).fill(null),
             borderColor: getRandomColor(),
             fill: false
         };
         chart.data.datasets.push(graphLine);
     }
 
-    // Ensure current datasets are updated
+    // Update the data of each dataset for future time slots
     chart.data.datasets.forEach((dataset, phoneIndex) => {
-        if (dataset.data.length < 20) {
-            dataset.data = Array(20).fill(null);
-        }
-        dataset.label = `Phone ${phoneIndex + 1}`;
+        const futureData = Array.from({length: graphWindowSize - dataset.data.length}, (_, i) => getFrequency(timeSlotCounter + i + 1, phoneIndex, numberOfFrequencies));
+        dataset.data = dataset.data.concat(futureData);
     });
 
     updateGraph();
@@ -166,8 +164,8 @@ function updateParameters() {
     // Apply new settings immediately
     chart.update();
     updatePhonesDisplay();
-
 }
+
 
 function updateSpeed() {
     const speed = parseFloat(document.getElementById('speed').value);
