@@ -42,8 +42,14 @@ let simulationSpeed = parseFloat(speedInput.value);
 document.addEventListener('DOMContentLoaded', startSimulation);
 numberPhonesInput.addEventListener('input', updateParameters);
 numberFrequenciesInput.addEventListener('input', updateParameters);
-speedInput.addEventListener('input', updateSpeed);
+speedInput.addEventListener('input', updateParameters);
 playButton.addEventListener('click', togglePlayPause);
+document.addEventListener('keydown', function (event) {
+    if (event.code === 'Space') {
+        event.preventDefault();
+        togglePlayPause();
+    }
+});
 
 /**
  * Starts the simulation.
@@ -79,9 +85,12 @@ function createGraphLine(phoneIndex) {
         label: `Phone ${phoneIndex + 1}`,
         data: Array.from({length: graphWindowSize}, (_, i) => getFrequency(i, phoneIndex)),
         borderColor: getColor(phoneIndex),
+        borderWidth: Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5,
+        pointBackgroundColor: getColor(phoneIndex),
         fill: false
     };
 }
+
 
 /**
  * Creates a chart.
@@ -98,12 +107,15 @@ function createChart(context, labels, data) {
             datasets: data
         },
         options: {
-            animation: false,
+
             scales: {
                 x: {
                     title: {
                         display: true,
                         text: 'Time Slot'
+                    },
+                    grid: {
+                        display: false
                     }
                 },
                 y: {
@@ -111,10 +123,12 @@ function createChart(context, labels, data) {
                         display: true,
                         text: 'Frequency Band'
                     },
-                    min: 1,
-                    max: numberOfFrequencies,
+                    min: 0.8,
+                    max: numberOfFrequencies + 0.2,
                     ticks: {
-                        stepSize: 1
+                        callback: function (value, index, values) {
+                            return Number.isInteger(value) ? value : null;
+                        }
                     }
                 }
             }
@@ -151,8 +165,10 @@ function updateParameters() {
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
     simulationSpeed = parseFloat(speedInput.value);
 
+    updateInterval = defaultUpdateInterval / simulationSpeed;
+
     // Adjust the chart's y-axis max value
-    chart.options.scales.y.max = numberOfFrequencies;
+    chart.options.scales.y.max = numberOfFrequencies + 0.2;
 
     // Adjust the datasets
     while (chart.data.datasets.length > numberOfPhones) {
@@ -174,6 +190,7 @@ function updateParameters() {
     chart.data.datasets.forEach((dataset, phoneIndex) => {
         const futureData = Array.from({length: graphWindowSize - dataset.data.length}, (_, i) => getFrequency(timeSlotCounter + i + 1, phoneIndex, numberOfFrequencies));
         dataset.data = dataset.data.concat(futureData);
+        dataset.borderWidth = Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5;
     });
 
     updateGraph();
@@ -181,15 +198,6 @@ function updateParameters() {
     // Apply new settings immediately
     chart.update();
     updatePhonesDisplay();
-}
-
-/**
- * Updates the simulation speed.
- */
-function updateSpeed() {
-    simulationSpeed = parseFloat(speedInput.value);
-    updateInterval = 1000 / simulationSpeed;
-    updateGraph();
 }
 
 /**
