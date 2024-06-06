@@ -76,7 +76,7 @@ increaseButtons.forEach(button => {
         }
     });
 });
-window.addEventListener('resize', function(event){
+window.addEventListener('resize', function (event) {
     updatePhonesDisplay();
 });
 
@@ -121,6 +121,7 @@ function createGraphLine(phoneIndex, timeSlot = timeSlotCounter) {
         label: `Phone ${phoneIndex + 1}`,
         data: Array(graphWindowSize).fill(null),
         borderColor: getColor(phoneIndex),
+        borderWidth: Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5,
         backgroundColor: changeLightness(getColor(phoneIndex), 20),
         fill: false
     };
