@@ -346,3 +346,19 @@ function changeLightness(hex, gap) {
         return hex.length === 1 ? '0' + hex : hex;
     }).join('');
 }
+
+
+// getPseudoRandomSequence(hsn + phoneIndex); // Usage example
+/*
+function getPseudoRandomSequence(seed) {
+    let sequence = [];
+
+    for (let i = 0; i < hsn + numberOfFrequencies; ++i) {
+        seed = (1103515245 * seed + 12345) % 2147483648;
+        sequence.push(1 + (seed % numberOfFrequencies));
+    }
+
+    return sequence;
+}
+*/
+
