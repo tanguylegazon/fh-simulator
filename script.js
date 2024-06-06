@@ -6,8 +6,8 @@ const defaultUpdateInterval = 1000; // 1 second
 const colorPalette = [
     "#36A2EB", // Blue
     "#FF6384", // Red
-    "#4BC0C0", // Cyan
     "#FF9F40", // Orange
+    "#4BC0C0", // Cyan
     "#9966FF", // Purple
     "#FFCD56", // Yellow
     "#C9CBCF", // Gray
@@ -76,6 +76,9 @@ increaseButtons.forEach(button => {
         }
     });
 });
+window.addEventListener('resize', function (event) {
+    updatePhonesDisplay();
+});
 
 playButton.addEventListener('click', () => {
 
@@ -109,15 +112,17 @@ function startSimulation() {
 /**
  * Creates a graph line for a phone.
  * @param {number} phoneIndex - The index of the phone.
+ * @param {number} [timeSlot] - The time slot for which the graph line is created.
+ * If not provided, the current time slot is used.
  * @returns {Object} - The graph line object.
  */
-function createGraphLine(phoneIndex) {
+function createGraphLine(phoneIndex, timeSlot = timeSlotCounter) {
     return {
         label: `Phone ${phoneIndex + 1}`,
-        data: Array.from({length: graphWindowSize}, (_, i) => getFrequency(i, phoneIndex)),
+        data: Array(graphWindowSize).fill(null),
         borderColor: getColor(phoneIndex),
         borderWidth: Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5,
-        backgroundColor: getColor(phoneIndex),
+        backgroundColor: changeLightness(getColor(phoneIndex), 15),
         fill: false
     };
 }
@@ -138,7 +143,14 @@ function createChart(context, labels, data) {
             datasets: data
         },
         options: {
-
+            responsive: true,
+            maintainAspectRatio: false,
+            elements: {
+                line: {
+                    tension: 0,
+                    borderJoinStyle: 'round'
+                }
+            },
             scales: {
                 x: {
                     title: {
@@ -157,6 +169,7 @@ function createChart(context, labels, data) {
                     min: 0.8,
                     max: numberOfFrequencies + 0.2,
                     ticks: {
+                        stepSize: 1,
                         callback: function (value) {
                             return Number.isInteger(value) ? value : null;
                         }
@@ -198,37 +211,26 @@ function updateParameters() {
     speedOutput.textContent = `${simulationSpeed}x`;
 
     updateInterval = defaultUpdateInterval / simulationSpeed;
-
-    // Adjust the chart's y-axis max value
     chart.options.scales.y.max = numberOfFrequencies + 0.2;
 
-    // Adjust the datasets
     while (chart.data.datasets.length > numberOfPhones) {
         chart.data.datasets.pop();
     }
 
     while (chart.data.datasets.length < numberOfPhones) {
         const phoneIndex = chart.data.datasets.length;
-        const graphLine = {
-            label: `Phone ${phoneIndex + 1}`,
-            data: Array(graphWindowSize).fill(null),
-            borderColor: getColor(phoneIndex),
-            backgroundColor: getColor(phoneIndex),
-            fill: false
-        };
+        const graphLine = createGraphLine(phoneIndex);
         chart.data.datasets.push(graphLine);
     }
 
-    // Update the data of each dataset for future time slots
     chart.data.datasets.forEach((dataset, phoneIndex) => {
-        const futureData = Array.from({length: graphWindowSize - dataset.data.length}, (_, i) => getFrequency(timeSlotCounter + i + 1, phoneIndex, numberOfFrequencies));
+        const futureData = Array.from({length: graphWindowSize - dataset.data.length}, (_, i) => getFrequencyHSN(timeSlotCounter + i + 1, phoneIndex, numberOfFrequencies));
         dataset.data = dataset.data.concat(futureData);
         dataset.borderWidth = Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5;
     });
 
     updateGraph();
 
-    // Apply new settings immediately
     chart.update();
     updatePhonesDisplay();
 }
@@ -249,8 +251,8 @@ function updateGraph() {
  * @param {number} phoneIndex - The index of the phone.
  * @returns {number} - The frequency.
  */
-function getFrequency(timeSlot, phoneIndex) {
-    return (timeSlot + phoneIndex) % numberOfFrequencies + 1;
+function getFrequencyHSN(timeSlot, phoneIndex) {
+    return ((timeSlot + phoneIndex) % numberOfFrequencies + 1);
 }
 
 /**
@@ -262,7 +264,7 @@ function updateChartData() {
 
     chart.data.datasets.forEach((dataset, phoneIndex) => {
         if (phoneIndex < numberOfPhones) {
-            dataset.data.push(getFrequency(timeSlotCounter, phoneIndex));
+            dataset.data.push(getFrequencyHSN(timeSlotCounter, phoneIndex));
             dataset.data.shift();
         } else {
             dataset.data = [];
@@ -294,4 +296,53 @@ function togglePlayPause() {
  */
 function getColor(phoneIndex) {
     return colorPalette[phoneIndex % colorPalette.length];
+}
+
+function changeLightness(hex, gap) {
+    let [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16) / 255);
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+    let d = max - min;
+
+    if (d === 0) {
+        h = s = 0;
+    } else {
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r:
+                h = (g - b) / d + (g < b ? 6 : 0);
+                break;
+            case g:
+                h = (b - r) / d + 2;
+                break;
+            case b:
+                h = (r - g) / d + 4;
+                break;
+        }
+        h /= 6;
+    }
+
+    l = Math.min(1, l + gap / 100);
+
+    const hue2rgb = (p, q, t) => {
+        t = (t < 0) ? t + 1 : (t > 1) ? t - 1 : t;
+        return t < 1 / 6 ? p + (q - p) * 6 * t :
+            t < 1 / 2 ? q :
+                t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p;
+    };
+
+    if (s === 0) {
+        r = g = b = l;
+    } else {
+        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        let p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1 / 3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1 / 3);
+    }
+
+    return "#" + [r, g, b].map(x => {
+        const hex = Math.round(x * 255).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    }).join('');
 }
