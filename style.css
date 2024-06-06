@@ -1,8 +1,69 @@
+:root {
+    --input-selectable-color: #86868b;
+    --input-selected-color: #007AFF;
+    --button-color: #E5EBF1;
+    --button-color-hover: #C9D8E8;
+    --label-button-color: #E0EFFF;
+    --button-success-color: #34C759;
+
+    --button-danger-color: #1a8548;
+    --button-danger-color: #029D45;
+
+
+    --short-transition-duration: 70ms;
+    --long-transition-duration: 120ms;
+}
+
 body {
     font-family: sans-serif;
     height: 100vh;
     width: 100vw;
     margin: 0;
+}
+
+input, button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--input-selectable-color);
+    font-size: 1em;
+}
+
+button {
+    background-color: var(--button-color);
+    cursor: pointer;
+    font-family: sans-serif;
+    color: black;
+    transition: background-color var(--short-transition-duration) ease;
+}
+
+button:hover {
+    background-color: var(--button-color-hover);
+}
+
+input:focus {
+    outline: none;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 120px;
+    height: 6px;
+    background: #B9C4CDFF;
+    border-radius: 5px;
+    padding: 0;
+    border: none;
+}
+
+input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: white;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: #4E4f55 0 0 18px -4px;
 }
 
 .container {
@@ -15,9 +76,75 @@ body {
 }
 
 .toolbar {
-    height: 40px;
-    background-color: rosybrown;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: center;
 }
+
+.toolbar-item {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.toolbar label, #speed-output {
+    font-family: monospace;
+    font-size: 1.2em;
+}
+
+.counter {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+}
+
+.counter .counter-decrease {
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+}
+
+.counter input {
+    position: relative;
+    width: 3ch;
+    text-align: center;
+    border-radius: 0;
+    z-index: 1;
+}
+
+.counter .counter-increase {
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+}
+
+#speed-output {
+    display: inline-block;
+    width: 3ch;
+}
+
+#play-button {
+    display: flex;
+    width: 10ch;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+
+#play-button svg {
+    width: 1em;
+    height: 1em;
+}
+
+#pause-icon, #play-button.playing #play-icon {
+    display: none;
+}
+
+#play-button.playing #pause-icon {
+    display: inline;
+}
+
 
 .content {
     display: flex;

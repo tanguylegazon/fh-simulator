@@ -26,15 +26,21 @@ let isPlaying = true;
 /*********************
  * Document elements *
  *********************/
-const numberPhonesInput = document.getElementById('number-phones');
-const numberFrequenciesInput = document.getElementById('number-frequencies');
-const speedInput = document.getElementById('speed');
+const numberPhonesInput = document.getElementById('nb-phones');
+const numberFrequenciesInput = document.getElementById('nb-frequencies');
+const speedSlider = document.getElementById('speed');
+const speedOutput = document.getElementById('speed-output');
 const playButton = document.getElementById('play-button');
+const playButtonText = document.getElementById('play-text');
+
+const decreaseButtons = document.querySelectorAll('.counter-decrease');
+const increaseButtons = document.querySelectorAll('.counter-increase');
 
 let numberOfPhones = parseInt(numberPhonesInput.value);
 let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
-let simulationSpeed = parseFloat(speedInput.value);
+let simulationSpeed = parseFloat(speedSlider.value) || 0.5;
 
+speedOutput.textContent = `${simulationSpeed}x`;
 
 /**************************
  * Global event listeners *
@@ -42,7 +48,7 @@ let simulationSpeed = parseFloat(speedInput.value);
 document.addEventListener('DOMContentLoaded', startSimulation);
 numberPhonesInput.addEventListener('input', updateParameters);
 numberFrequenciesInput.addEventListener('input', updateParameters);
-speedInput.addEventListener('input', updateParameters);
+speedSlider.addEventListener('input', updateParameters);
 playButton.addEventListener('click', togglePlayPause);
 document.addEventListener('keydown', function (event) {
     if (event.code === 'Space') {
@@ -50,6 +56,31 @@ document.addEventListener('keydown', function (event) {
         togglePlayPause();
     }
 });
+decreaseButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const input = button.nextElementSibling;
+        console.log(input.value, input.min)
+        if (parseInt(input.value) > parseInt(input.min)) {
+            --input.value;
+            input.dispatchEvent(new Event('input'));
+        }
+    });
+});
+increaseButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const input = button.previousElementSibling;
+        if (parseInt(input.value) < parseInt(input.max)) {
+            console.log("ici")
+            ++input.value;
+            input.dispatchEvent(new Event('input'));
+        }
+    });
+});
+
+playButton.addEventListener('click', () => {
+
+});
+
 
 /**
  * Starts the simulation.
@@ -86,7 +117,7 @@ function createGraphLine(phoneIndex) {
         data: Array.from({length: graphWindowSize}, (_, i) => getFrequency(i, phoneIndex)),
         borderColor: getColor(phoneIndex),
         borderWidth: Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5,
-        pointBackgroundColor: getColor(phoneIndex),
+        backgroundColor: getColor(phoneIndex),
         fill: false
     };
 }
@@ -163,7 +194,8 @@ function updatePhonesDisplay() {
 function updateParameters() {
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
-    simulationSpeed = parseFloat(speedInput.value);
+    simulationSpeed = parseFloat(speedSlider.value) || 0.5;
+    speedOutput.textContent = `${simulationSpeed}x`;
 
     updateInterval = defaultUpdateInterval / simulationSpeed;
 
@@ -181,6 +213,7 @@ function updateParameters() {
             label: `Phone ${phoneIndex + 1}`,
             data: Array(graphWindowSize).fill(null),
             borderColor: getColor(phoneIndex),
+            backgroundColor: getColor(phoneIndex),
             fill: false
         };
         chart.data.datasets.push(graphLine);
@@ -245,7 +278,12 @@ function updateChartData() {
  */
 function togglePlayPause() {
     isPlaying = !isPlaying;
-    playButton.textContent = isPlaying ? 'Pause' : 'Play';
+    playButtonText.textContent = isPlaying ? 'Pause' : 'Play';
+    if (isPlaying) {
+        playButton.classList.add('playing');
+    } else {
+        playButton.classList.remove('playing');
+    }
     updateGraph();
 }
 
