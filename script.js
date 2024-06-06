@@ -22,6 +22,9 @@ let updateInterval;
 let timeSlotCounter = 0;
 let isPlaying = true;
 
+// Te be removed
+const hsn = 1;
+
 
 /*********************
  * Document elements *
@@ -59,7 +62,6 @@ document.addEventListener('keydown', function (event) {
 decreaseButtons.forEach(button => {
     button.addEventListener('click', () => {
         const input = button.nextElementSibling;
-        console.log(input.value, input.min)
         if (parseInt(input.value) > parseInt(input.min)) {
             --input.value;
             input.dispatchEvent(new Event('input'));
@@ -70,7 +72,6 @@ increaseButtons.forEach(button => {
     button.addEventListener('click', () => {
         const input = button.previousElementSibling;
         if (parseInt(input.value) < parseInt(input.max)) {
-            console.log("ici")
             ++input.value;
             input.dispatchEvent(new Event('input'));
         }
@@ -252,7 +253,14 @@ function updateGraph() {
  * @returns {number} - The frequency.
  */
 function getFrequencyHSN(timeSlot, phoneIndex) {
-    return ((timeSlot + phoneIndex) % numberOfFrequencies + 1);
+    if (hsn === 0) {
+        return (timeSlot + phoneIndex) % numberOfFrequencies + 1;
+    } else {
+        const sequenceLength = numberOfFrequencies + hsn;
+        const sequenceIndex = (timeSlot - 1) % sequenceLength;
+        const seed = hsn * (phoneIndex + 1) * sequenceIndex;
+        return getPseudoRandom(seed) % numberOfFrequencies + 1;
+    }
 }
 
 /**
@@ -348,17 +356,6 @@ function changeLightness(hex, gap) {
 }
 
 
-// getPseudoRandomSequence(hsn + phoneIndex); // Usage example
-/*
-function getPseudoRandomSequence(seed) {
-    let sequence = [];
-
-    for (let i = 0; i < hsn + numberOfFrequencies; ++i) {
-        seed = (1103515245 * seed + 12345) % 2147483648;
-        sequence.push(1 + (seed % numberOfFrequencies));
-    }
-
-    return sequence;
+function getPseudoRandom(seed) {
+    return (1103515245 * seed + 12345) % 2147483647;
 }
-*/
-
