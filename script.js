@@ -122,7 +122,7 @@ function createGraphLine(phoneIndex, timeSlot = timeSlotCounter) {
         data: Array(graphWindowSize).fill(null),
         borderColor: getColor(phoneIndex),
         borderWidth: Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5,
-        backgroundColor: changeLightness(getColor(phoneIndex), 20),
+        backgroundColor: changeLightness(getColor(phoneIndex), 15),
         fill: false
     };
 }
