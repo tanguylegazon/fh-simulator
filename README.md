@@ -48,6 +48,7 @@ To use this simulator, you can either:
 ## Authors
 
 - [Corentin](https://github.com/cocoutbm)
+- [Lukman]()
 - [Nicolas](https://github.com/nic0c0)
 - [Tanguy](https://github.com/Eseltwift)
 
