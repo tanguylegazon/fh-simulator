@@ -40,7 +40,7 @@ To use this simulator, you can either:
 ### Functionality
 
 - Use the <control>+</control> and <control>-</control> buttons to adjust the number of phones, frequency bands, and
-  HSN.
+  HSN value.
 - Use the slider to adjust the frequency hopping speed.
 - Click the <control>Play</control>/<control>Pause</control> button to start or stop the simulation (alternatively, you
   can press the Space key).
