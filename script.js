@@ -31,7 +31,7 @@ const hsn = 1;
  *********************/
 const numberPhonesInput = document.getElementById('nb-phones');
 const numberFrequenciesInput = document.getElementById('nb-frequencies');
-const speedSlider = document.getElementById('speed');
+const speedSlider = document.getElementById('speed-slider');
 const speedOutput = document.getElementById('speed-output');
 const playButton = document.getElementById('play-button');
 const playButtonText = document.getElementById('play-text');
