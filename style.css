@@ -247,7 +247,7 @@ footer > a {
     align-items: center;
     flex-direction: row;
     gap: 10px;
-    transition: color 150ms ease;
+    transition: color calc(2 * var(--transition-duration)) ease;
 }
 
 footer > a:hover {
