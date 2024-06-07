@@ -45,11 +45,6 @@ To use this simulator, you can either:
 - Click the <control>Play</control>/<control>Pause</control> button to start or stop the simulation (alternatively, you
   can press the Space key).
 
-## Live Version
-
-A live version of the simulator is available
-at [tanguy-portfolio.com/simulator](https://tanguy-portfolio.com/simulator).
-
 ## Authors
 
 - [Corentin](https://github.com/cocoutbm)
