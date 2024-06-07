@@ -29,9 +29,13 @@
     </div>
 
     <div class="toolbar-item">
-        <label for="hsn-slider">HSN Value</label>
-        <input type="range" id="hsn-slider" min="0" max="63" step="1" value="0">
-        <div id="hsn-output"></div>
+        <label for="hsn" class="visually-hidden">HSN Value</label>
+        <div class="counter">
+            <button class="counter-decrease">−</button>
+            <input id="hsn" inputmode="numeric" min="0" max="63" value="0"
+                   oninput="this.value = this.value.replace(/\D+/g, '')"/>
+            <button class="counter-increase">+</button>
+        </div>
     </div>
 
     <div class="toolbar-item">
