@@ -63,13 +63,9 @@ hsn.addEventListener('keydown', function (event) {
 });
 speedSlider.addEventListener('input', updateSimulationParameters);
 playButton.addEventListener('click', togglePlayPause);
-
 decreaseButtons.forEach(button => button.addEventListener('click', decreaseInputValue));
-
 increaseButtons.forEach(button => button.addEventListener('click', increaseInputValue));
 window.addEventListener('resize', updatePhonesDisplay);
-
-
 document.addEventListener('keydown', function (event) {
     if (event.code === 'Space') {
         event.preventDefault();
@@ -77,14 +73,16 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
-
+/**
+ * Initializes the code by updating the parameters and starting the simulation.
+ */
 function initialize() {
     updateSimulationParameters();
     startSimulation();
 }
 
 /**
- * Starts the simulation.
+ * Starts the simulation by creating the graph.
  */
 function startSimulation() {
     const context = document.getElementById('graph').getContext('2d');
@@ -180,12 +178,14 @@ function createGraphLine(phoneIndex) {
  * Updates the simulation parameters based on the user input.
  */
 function updateSimulationParameters() {
+    // Retrieve the user input values
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
     simulationSpeed = parseFloat(speedSlider.value) || 0.5;
     hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
     updateInterval = defaultUpdateInterval / simulationSpeed;
 
+    // Update the displayed values
     hsn.value = String(hsnValue);
     speedOutput.textContent = `${simulationSpeed}x`;
 
@@ -231,11 +231,13 @@ function updateGraphParameters() {
  * Updates the graph data.
  */
 function updateGraphData() {
+    // Add a new time slot to the graph (x-axis)
     if (timeSlotCounter > graphWindowSize) {
         graph.data.labels.push(timeSlotCounter);
         graph.data.labels.shift();
     }
 
+    // Add the frequency of each phone to the graph (y-axis)
     graph.data.datasets.forEach((dataset, phoneIndex) => {
         if (phoneIndex < numberOfPhones) {
             dataset.data.push(getFrequencyHSN(timeSlotCounter, phoneIndex));
@@ -249,7 +251,6 @@ function updateGraphData() {
     graph.update('none');
 
     ++timeSlotCounter;
-    console.log(timeSlotCounter);
 }
 
 /**
@@ -258,10 +259,12 @@ function updateGraphData() {
 function updatePhonesDisplay() {
     const phonesContainer = document.getElementById('phones-container');
     phonesContainer.innerHTML = '';
+
+    // Calculate the radius and angle step for the phones to be evenly distributed around the antenna
     const radius = phonesContainer.offsetHeight * 0.4;
     const angleStep = 360 / numberOfPhones;
 
-    // Create a phone icon for each phone and position it evenly around the antenna
+    // Create a phone icon for each phone and position it on the page
     for (let phoneIndex = 0; phoneIndex < numberOfPhones; ++phoneIndex) {
         const phone = document.createElement('div');
         phone.classList.add('phone');
@@ -279,7 +282,8 @@ function updatePhonesDisplay() {
  * Utils *
  *********/
 /**
- * Gets the assigned frequency for a phone at a given time slot.
+ * Gets the assigned frequency for a phone at a given time slot based on the HSN value. HSN0 use a different logic than
+ * other HSN values.
  * @param {number} timeSlot - The time slot.
  * @param {number} phoneIndex - The index of the phone.
  * @returns {number} - The assigned frequency.
@@ -297,6 +301,7 @@ function getFrequencyHSN(timeSlot, phoneIndex) {
 
 /**
  * Generates a pseudo-random number based on a seed.
+ * CAUTION: This function is not cryptographically secure.
  * @param seed - The seed which generates the pseudo-random number.
  * @returns {number} - A pseudo-random number between 0 and 2147483646.
  */
@@ -314,7 +319,7 @@ function getColor(phoneIndex) {
 }
 
 /**
- * Changes the lightness of a color.
+ * Changes the lightness of an hexadecimal color.
  * @param hex - The color in hexadecimal format.
  * @param gap - The gap to change the lightness.
  * @returns {string} - The new color in hexadecimal format.
