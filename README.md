@@ -1,11 +1,3 @@
-<style>
-    control {
-        padding: 0 2px;
-        font-family: monospace;
-        font-weight: bold;
-    }
-</style>
-
 # Frequency Hopping Simulator
 
 ## Description
