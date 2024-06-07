@@ -190,12 +190,15 @@ input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb
 .pulse {
     position: absolute;
     z-index: -1;
-    background: rgba(0, 210, 255, 0.25);
     width: 100%;
     height: 100%;
-    animation: pulse 1s infinite;
     aspect-ratio: 1;
     border-radius: 50%;
+}
+
+.animating {
+    background: rgba(0, 210, 255, 0.25);
+    animation: pulse 1s infinite;
 }
 
 .pulse-1 {

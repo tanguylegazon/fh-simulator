@@ -304,50 +304,6 @@ function getPseudoRandom(seed) {
     return (1103515245 * seed + 12345) % 2147483647;
 }
 
-
-/****************
- * HTML buttons *
- ****************/
-/**
- * Toggles the play/pause state.
- */
-function togglePlayPause() {
-    isPlaying = !isPlaying;
-    playButtonText.textContent = isPlaying ? 'Pause' : 'Play';
-    if (isPlaying) {
-        playButton.classList.add('playing');
-    } else {
-        playButton.classList.remove('playing');
-    }
-    updateGraph();
-}
-
-/**
- * Decreases the input value by one.
- */
-function decreaseInputValue() {
-    const input = this.nextElementSibling;
-    if (parseInt(input.value) > parseInt(input.min)) {
-        --input.value;
-        input.dispatchEvent(new Event('input'));
-    }
-}
-
-/**
- * Increases the input value by one.
- */
-function increaseInputValue() {
-    const input = this.previousElementSibling;
-    if (parseInt(input.value) < parseInt(input.max)) {
-        ++input.value;
-        input.dispatchEvent(new Event('input'));
-    }
-}
-
-
-/****************
- * Colors utils *
- ****************/
 /**
  * Gets a color from the color palette based on the phone index.
  * @param {number} phoneIndex - The index of the phone.
@@ -410,4 +366,59 @@ function changeLightness(hex, gap) {
         const hex = Math.round(x * 255).toString(16);
         return hex.length === 1 ? '0' + hex : hex;
     }).join('');
+}
+
+
+/*****************************
+ * HTML buttons & animations *
+ *****************************/
+/**
+ * Toggles the play/pause state.
+ */
+function togglePlayPause() {
+    isPlaying = !isPlaying;
+    playButtonText.textContent = isPlaying ? 'Pause' : 'Play';
+    if (isPlaying) {
+        playButton.classList.add('playing');
+    } else {
+        playButton.classList.remove('playing');
+    }
+    togglePulseAnimation();
+    updateGraph();
+}
+
+/**
+ * Toggles the radio pulse animation on the antenna.
+ */
+function togglePulseAnimation() {
+    const pulseElements = document.querySelectorAll('.pulse');
+    pulseElements.forEach(pulse => {
+        if (isPlaying) {
+            pulse.classList.add('animating');
+        } else {
+            pulse.classList.remove('animating');
+        }
+    });
+}
+
+/**
+ * Decreases the input value by one.
+ */
+function decreaseInputValue() {
+    const input = this.nextElementSibling;
+    if (parseInt(input.value) > parseInt(input.min)) {
+        --input.value;
+        input.dispatchEvent(new Event('input'));
+    }
+}
+
+/**
+ * Increases the input value by one.
+ */
+function increaseInputValue() {
+    const input = this.previousElementSibling;
+    if (parseInt(input.value) < parseInt(input.max)) {
+        ++input.value;
+        input.dispatchEvent(new Event('input'));
+    }
 }
