@@ -28,8 +28,7 @@ let isPlaying = true;
  *********************/
 const numberPhonesInput = document.getElementById('nb-phones');
 const numberFrequenciesInput = document.getElementById('nb-frequencies');
-const hsnSlider = document.getElementById('hsn-slider');
-const hsnOutput = document.getElementById('hsn-output');
+const hsn = document.getElementById('hsn');
 const speedSlider = document.getElementById('speed-slider');
 const speedOutput = document.getElementById('speed-output');
 const playButton = document.getElementById('play-button');
@@ -41,10 +40,11 @@ const increaseButtons = document.querySelectorAll('.counter-increase');
 let numberOfPhones = parseInt(numberPhonesInput.value);
 let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
 let simulationSpeed = parseFloat(speedSlider.value) || 0.5;
-let hsnValue = parseFloat(hsnSlider.value);
+let hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
 
-hsnOutput.textContent = `${hsnValue}`;
+hsn.value = String(hsnValue);
 speedOutput.textContent = `${simulationSpeed}x`;
+
 
 /**************************
  * Global event listeners *
@@ -52,7 +52,20 @@ speedOutput.textContent = `${simulationSpeed}x`;
 document.addEventListener('DOMContentLoaded', startSimulation);
 numberPhonesInput.addEventListener('input', updateParameters);
 numberFrequenciesInput.addEventListener('input', updateParameters);
-hsnSlider.addEventListener('input', updateParameters);
+hsn.addEventListener('input', updateParameters);
+hsn.addEventListener('focus', function () {
+    this.select();
+});
+hsn.addEventListener('blur', function () {
+    hsn.value = String(hsnValue);
+});
+
+hsn.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        hsn.value = String(hsnValue);
+        this.blur();
+    }
+});
 speedSlider.addEventListener('input', updateParameters);
 playButton.addEventListener('click', togglePlayPause);
 document.addEventListener('keydown', function (event) {
@@ -81,10 +94,6 @@ increaseButtons.forEach(button => {
 });
 window.addEventListener('resize', function (event) {
     updatePhonesDisplay();
-});
-
-playButton.addEventListener('click', () => {
-
 });
 
 
@@ -211,8 +220,7 @@ function updateParameters() {
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
     simulationSpeed = parseFloat(speedSlider.value) || 0.5;
-    hsnValue = parseFloat(hsnSlider.value);
-    hsnOutput.textContent = `${hsnValue}`;
+    hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
     speedOutput.textContent = `${simulationSpeed}x`;
 
     updateInterval = defaultUpdateInterval / simulationSpeed;
