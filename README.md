@@ -30,12 +30,12 @@ frequency bands.
 
 ## Usage
 
-### Installation
+### Setup
 
 To use this simulator, you can either:
 
-1. Download the project files and open the `index.html` in your web browser.
-2. Access the live version at [tanguy-portfolio.com/simulator](https://tanguy-portfolio.com/simulator).
+1. Access the live version at [tanguy-portfolio.com/simulator](https://tanguy-portfolio.com/simulator).
+2. Download the project files and open the `index.html` in your web browser.
 
 ### Functionality
 
