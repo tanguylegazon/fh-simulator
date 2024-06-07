@@ -16,11 +16,15 @@ const colorPalette = [
     "#99FF99"  // Lime Green
 ];
 
-let chart;
+let graph;
 let intervalId;
 let updateInterval;
-let timeSlotCounter = 0;
+let timeSlotCounter = 1;
 let isPlaying = true;
+let numberOfPhones;
+let numberOfFrequencies;
+let hsnValue;
+let simulationSpeed;
 
 
 /*********************
@@ -33,26 +37,17 @@ const speedSlider = document.getElementById('speed-slider');
 const speedOutput = document.getElementById('speed-output');
 const playButton = document.getElementById('play-button');
 const playButtonText = document.getElementById('play-text');
-
 const decreaseButtons = document.querySelectorAll('.counter-decrease');
 const increaseButtons = document.querySelectorAll('.counter-increase');
-
-let numberOfPhones = parseInt(numberPhonesInput.value);
-let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
-let simulationSpeed = parseFloat(speedSlider.value) || 0.5;
-let hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
-
-hsn.value = String(hsnValue);
-speedOutput.textContent = `${simulationSpeed}x`;
 
 
 /**************************
  * Global event listeners *
  **************************/
-document.addEventListener('DOMContentLoaded', startSimulation);
-numberPhonesInput.addEventListener('input', updateParameters);
-numberFrequenciesInput.addEventListener('input', updateParameters);
-hsn.addEventListener('input', updateParameters);
+document.addEventListener('DOMContentLoaded', initialize);
+numberPhonesInput.addEventListener('input', updateSimulationParameters);
+numberFrequenciesInput.addEventListener('input', updateSimulationParameters);
+hsn.addEventListener('input', updateSimulationParameters);
 hsn.addEventListener('focus', function () {
     this.select();
 });
@@ -66,88 +61,61 @@ hsn.addEventListener('keydown', function (event) {
         this.blur();
     }
 });
-speedSlider.addEventListener('input', updateParameters);
+speedSlider.addEventListener('input', updateSimulationParameters);
 playButton.addEventListener('click', togglePlayPause);
+
+decreaseButtons.forEach(button => button.addEventListener('click', decreaseInputValue));
+
+increaseButtons.forEach(button => button.addEventListener('click', increaseInputValue));
+window.addEventListener('resize', updatePhonesDisplay);
+
+
 document.addEventListener('keydown', function (event) {
     if (event.code === 'Space') {
         event.preventDefault();
         togglePlayPause();
     }
 });
-decreaseButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const input = button.nextElementSibling;
-        if (parseInt(input.value) > parseInt(input.min)) {
-            --input.value;
-            input.dispatchEvent(new Event('input'));
-        }
-    });
-});
-increaseButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const input = button.previousElementSibling;
-        if (parseInt(input.value) < parseInt(input.max)) {
-            ++input.value;
-            input.dispatchEvent(new Event('input'));
-        }
-    });
-});
-window.addEventListener('resize', function (event) {
-    updatePhonesDisplay();
-});
 
+
+function initialize() {
+    updateSimulationParameters();
+    startSimulation();
+}
 
 /**
  * Starts the simulation.
  */
 function startSimulation() {
-    clearInterval(intervalId);
-    updateInterval = defaultUpdateInterval / simulationSpeed;
     const context = document.getElementById('graph').getContext('2d');
     const graphData = [];
-    const graphLabels = Array.from({length: graphWindowSize}, (_, i) => i + 1);
+    const graphLabels = Array.from({length: graphWindowSize}, (_, i) => i + timeSlotCounter);
 
+    // Create a graph line for each phone
     for (let phoneIndex = 0; phoneIndex < numberOfPhones; ++phoneIndex) {
         graphData.push(createGraphLine(phoneIndex));
     }
 
-    if (chart) {
-        chart.destroy();
+    // Destroy the previous graph if it exists
+    if (graph) {
+        graph.destroy();
     }
 
-    chart = createChart(context, graphLabels, graphData);
-    timeSlotCounter = graphWindowSize;
-    updatePhonesDisplay();
-    intervalId = setInterval(updateChartData, updateInterval);
+    // Create a new graph
+    graph = createGraph(context, graphLabels, graphData);
+
+    clearInterval(intervalId);
+    intervalId = setInterval(updateGraphData, updateInterval);
 }
 
 /**
- * Creates a graph line for a phone.
- * @param {number} phoneIndex - The index of the phone.
- * @param {number} [timeSlot] - The time slot for which the graph line is created.
- * If not provided, the current time slot is used.
- * @returns {Object} - The graph line object.
- */
-function createGraphLine(phoneIndex, timeSlot = timeSlotCounter) {
-    return {
-        label: `Phone ${phoneIndex + 1}`,
-        data: Array(graphWindowSize).fill(null),
-        borderColor: getColor(phoneIndex),
-        borderWidth: Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5,
-        backgroundColor: changeLightness(getColor(phoneIndex), 15),
-        fill: false
-    };
-}
-
-
-/**
- * Creates a chart.
+ * Creates a graph object.
  * @param {CanvasRenderingContext2D} context - The canvas rendering context.
  * @param {Array} labels - The labels for the x-axis.
- * @param {Array} data - The data for the chart.
- * @returns {Chart} - The chart object.
+ * @param {Array} data - The data for the graph.
+ * @returns {Chart} - The graph object.
  */
-function createChart(context, labels, data) {
+function createGraph(context, labels, data) {
     return new Chart(context, {
         type: 'line',
         data: {
@@ -193,7 +161,99 @@ function createChart(context, labels, data) {
 }
 
 /**
- * Updates the phones display.
+ * Creates a graph line for a phone.
+ * @param {number} phoneIndex - The index of the phone.
+ * @returns {Object} - The graph line object.
+ */
+function createGraphLine(phoneIndex) {
+    return {
+        label: `Phone ${phoneIndex + 1}`,
+        data: [],
+        borderColor: getColor(phoneIndex),
+        borderWidth: Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5,
+        backgroundColor: changeLightness(getColor(phoneIndex), 15),
+        fill: false
+    };
+}
+
+/**
+ * Updates the simulation parameters based on the user input.
+ */
+function updateSimulationParameters() {
+    numberOfPhones = parseInt(numberPhonesInput.value);
+    numberOfFrequencies = parseInt(numberFrequenciesInput.value);
+    simulationSpeed = parseFloat(speedSlider.value) || 0.5;
+    hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
+    updateInterval = defaultUpdateInterval / simulationSpeed;
+
+    hsn.value = String(hsnValue);
+    speedOutput.textContent = `${simulationSpeed}x`;
+
+    updateGraphParameters();
+    updatePhonesDisplay();
+}
+
+/**
+ * Updates the graph every update interval when the simulation is playing.
+ */
+function updateGraph() {
+    console.log(timeSlotCounter);
+    clearInterval(intervalId);
+    if (isPlaying) {
+        intervalId = setInterval(updateGraphData, updateInterval);
+    }
+}
+
+/**
+ * Updates the graph parameters based on the simulation parameters.
+ */
+function updateGraphParameters() {
+    if (graph) {
+        graph.options.scales.y.max = numberOfFrequencies + 0.2;
+
+        // Remove a phone if the number of phones has decreased
+        while (graph.data.datasets.length > numberOfPhones) {
+            graph.data.datasets.pop();
+        }
+
+        // Add a phone if the number of phones has increased
+        while (graph.data.datasets.length < numberOfPhones) {
+            const phoneIndex = graph.data.datasets.length;
+            const graphLine = createGraphLine(phoneIndex);
+            graph.data.datasets.push(graphLine);
+        }
+
+        updateGraph();
+        graph.update();
+    }
+}
+
+/**
+ * Updates the graph data.
+ */
+function updateGraphData() {
+    if (timeSlotCounter > graphWindowSize) {
+        graph.data.labels.push(timeSlotCounter);
+        graph.data.labels.shift();
+    }
+
+    graph.data.datasets.forEach((dataset, phoneIndex) => {
+        if (phoneIndex < numberOfPhones) {
+            dataset.data.push(getFrequencyHSN(timeSlotCounter, phoneIndex));
+            if (timeSlotCounter > graphWindowSize) dataset.data.shift();
+            dataset.borderWidth = Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5;
+        } else {
+            dataset.data = [];
+        }
+    });
+
+    graph.update('none');
+
+    ++timeSlotCounter;
+}
+
+/**
+ * Updates the display of the phones around the antenna.
  */
 function updatePhonesDisplay() {
     const phonesContainer = document.getElementById('phones-container');
@@ -201,6 +261,7 @@ function updatePhonesDisplay() {
     const radius = phonesContainer.offsetHeight * 0.4;
     const angleStep = 360 / numberOfPhones;
 
+    // Create a phone icon for each phone and position it evenly around the antenna
     for (let phoneIndex = 0; phoneIndex < numberOfPhones; ++phoneIndex) {
         const phone = document.createElement('div');
         phone.classList.add('phone');
@@ -213,56 +274,15 @@ function updatePhonesDisplay() {
     }
 }
 
+
+/*********
+ * Utils *
+ *********/
 /**
- * Updates the simulation parameters.
- */
-function updateParameters() {
-    numberOfPhones = parseInt(numberPhonesInput.value);
-    numberOfFrequencies = parseInt(numberFrequenciesInput.value);
-    simulationSpeed = parseFloat(speedSlider.value) || 0.5;
-    hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
-    speedOutput.textContent = `${simulationSpeed}x`;
-
-    updateInterval = defaultUpdateInterval / simulationSpeed;
-    chart.options.scales.y.max = numberOfFrequencies + 0.2;
-
-    while (chart.data.datasets.length > numberOfPhones) {
-        chart.data.datasets.pop();
-    }
-
-    while (chart.data.datasets.length < numberOfPhones) {
-        const phoneIndex = chart.data.datasets.length;
-        const graphLine = createGraphLine(phoneIndex);
-        chart.data.datasets.push(graphLine);
-    }
-
-    chart.data.datasets.forEach((dataset, phoneIndex) => {
-        const futureData = Array.from({length: graphWindowSize - dataset.data.length}, (_, i) => getFrequencyHSN(timeSlotCounter + i + 1, phoneIndex, numberOfFrequencies));
-        dataset.data = dataset.data.concat(futureData);
-        dataset.borderWidth = Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5;
-    });
-
-    updateGraph();
-
-    chart.update();
-    updatePhonesDisplay();
-}
-
-/**
- * Updates the graph.
- */
-function updateGraph() {
-    clearInterval(intervalId);
-    if (isPlaying) {
-        intervalId = setInterval(updateChartData, updateInterval);
-    }
-}
-
-/**
- * Calculates the frequency for a given time slot and phone index.
+ * Gets the assigned frequency for a phone at a given time slot.
  * @param {number} timeSlot - The time slot.
  * @param {number} phoneIndex - The index of the phone.
- * @returns {number} - The frequency.
+ * @returns {number} - The assigned frequency.
  */
 function getFrequencyHSN(timeSlot, phoneIndex) {
     if (hsnValue === 0) {
@@ -276,27 +296,20 @@ function getFrequencyHSN(timeSlot, phoneIndex) {
 }
 
 /**
- * Updates the chart data.
+ * Generates a pseudo-random number based on a seed.
+ * @param seed - The seed which generates the pseudo-random number.
+ * @returns {number} - A pseudo-random number between 0 and 2147483646.
  */
-function updateChartData() {
-    chart.data.labels.push(timeSlotCounter + 1);
-    chart.data.labels.shift();
-
-    chart.data.datasets.forEach((dataset, phoneIndex) => {
-        if (phoneIndex < numberOfPhones) {
-            dataset.data.push(getFrequencyHSN(timeSlotCounter, phoneIndex));
-            dataset.data.shift();
-        } else {
-            dataset.data = [];
-        }
-    });
-
-    ++timeSlotCounter;
-    chart.update('none');
+function getPseudoRandom(seed) {
+    return (1103515245 * seed + 12345) % 2147483647;
 }
 
+
+/****************
+ * HTML buttons *
+ ****************/
 /**
- * Toggles play/pause.
+ * Toggles the play/pause state.
  */
 function togglePlayPause() {
     isPlaying = !isPlaying;
@@ -310,14 +323,46 @@ function togglePlayPause() {
 }
 
 /**
- * Gets the color for a phone.
+ * Decreases the input value by one.
+ */
+function decreaseInputValue() {
+    const input = this.nextElementSibling;
+    if (parseInt(input.value) > parseInt(input.min)) {
+        --input.value;
+        input.dispatchEvent(new Event('input'));
+    }
+}
+
+/**
+ * Increases the input value by one.
+ */
+function increaseInputValue() {
+    const input = this.previousElementSibling;
+    if (parseInt(input.value) < parseInt(input.max)) {
+        ++input.value;
+        input.dispatchEvent(new Event('input'));
+    }
+}
+
+
+/****************
+ * Colors utils *
+ ****************/
+/**
+ * Gets a color from the color palette based on the phone index.
  * @param {number} phoneIndex - The index of the phone.
- * @returns {string} - The color.
+ * @returns {string} - The color in hexadecimal format.
  */
 function getColor(phoneIndex) {
     return colorPalette[phoneIndex % colorPalette.length];
 }
 
+/**
+ * Changes the lightness of a color.
+ * @param hex - The color in hexadecimal format.
+ * @param gap - The gap to change the lightness.
+ * @returns {string} - The new color in hexadecimal format.
+ */
 function changeLightness(hex, gap) {
     let [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16) / 255);
     let max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -365,9 +410,4 @@ function changeLightness(hex, gap) {
         const hex = Math.round(x * 255).toString(16);
         return hex.length === 1 ? '0' + hex : hex;
     }).join('');
-}
-
-
-function getPseudoRandom(seed) {
-    return (1103515245 * seed + 12345) % 2147483647;
 }
