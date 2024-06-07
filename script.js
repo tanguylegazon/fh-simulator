@@ -40,10 +40,11 @@ const increaseButtons = document.querySelectorAll('.counter-increase');
 let numberOfPhones = parseInt(numberPhonesInput.value);
 let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
 let simulationSpeed = parseFloat(speedSlider.value) || 0.5;
-let hsnValue = hsn.value < 0 ? 0 : hsn.value > 63 ? 63 : hsn.value;
+let hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
 
-hsn.value = hsnValue;
+hsn.value = String(hsnValue);
 speedOutput.textContent = `${simulationSpeed}x`;
+
 
 /**************************
  * Global event listeners *
@@ -55,7 +56,16 @@ hsn.addEventListener('input', updateParameters);
 hsn.addEventListener('focus', function () {
     this.select();
 });
-hsn.addEventListener('', updateParameters);
+hsn.addEventListener('blur', function () {
+    hsn.value = String(hsnValue);
+});
+
+hsn.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        hsn.value = String(hsnValue);
+        this.blur();
+    }
+});
 speedSlider.addEventListener('input', updateParameters);
 playButton.addEventListener('click', togglePlayPause);
 document.addEventListener('keydown', function (event) {
@@ -84,10 +94,6 @@ increaseButtons.forEach(button => {
 });
 window.addEventListener('resize', function (event) {
     updatePhonesDisplay();
-});
-
-playButton.addEventListener('click', () => {
-
 });
 
 
@@ -214,8 +220,7 @@ function updateParameters() {
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
     simulationSpeed = parseFloat(speedSlider.value) || 0.5;
-    hsnValue = hsnValue = hsn.value < 0 ? 0 : (hsn.value > 63 ? 63 : hsn.value);
-    hsn.value = hsnValue;
+    hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
     speedOutput.textContent = `${simulationSpeed}x`;
 
     updateInterval = defaultUpdateInterval / simulationSpeed;
