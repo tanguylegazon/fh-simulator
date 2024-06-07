@@ -22,15 +22,14 @@ let updateInterval;
 let timeSlotCounter = 0;
 let isPlaying = true;
 
-// Te be removed
-const hsn = 1;
-
 
 /*********************
  * Document elements *
  *********************/
 const numberPhonesInput = document.getElementById('nb-phones');
 const numberFrequenciesInput = document.getElementById('nb-frequencies');
+const hsnSlider = document.getElementById('hsn-slider');
+const hsnOutput = document.getElementById('hsn-output');
 const speedSlider = document.getElementById('speed-slider');
 const speedOutput = document.getElementById('speed-output');
 const playButton = document.getElementById('play-button');
@@ -42,7 +41,9 @@ const increaseButtons = document.querySelectorAll('.counter-increase');
 let numberOfPhones = parseInt(numberPhonesInput.value);
 let numberOfFrequencies = parseInt(numberFrequenciesInput.value);
 let simulationSpeed = parseFloat(speedSlider.value) || 0.5;
+let hsnValue = parseFloat(hsnSlider.value);
 
+hsnOutput.textContent = `${hsnValue}`;
 speedOutput.textContent = `${simulationSpeed}x`;
 
 /**************************
@@ -51,6 +52,7 @@ speedOutput.textContent = `${simulationSpeed}x`;
 document.addEventListener('DOMContentLoaded', startSimulation);
 numberPhonesInput.addEventListener('input', updateParameters);
 numberFrequenciesInput.addEventListener('input', updateParameters);
+hsnSlider.addEventListener('input', updateParameters);
 speedSlider.addEventListener('input', updateParameters);
 playButton.addEventListener('click', togglePlayPause);
 document.addEventListener('keydown', function (event) {
@@ -209,6 +211,8 @@ function updateParameters() {
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
     simulationSpeed = parseFloat(speedSlider.value) || 0.5;
+    hsnValue = parseFloat(hsnSlider.value);
+    hsnOutput.textContent = `${hsnValue}`;
     speedOutput.textContent = `${simulationSpeed}x`;
 
     updateInterval = defaultUpdateInterval / simulationSpeed;
@@ -253,12 +257,12 @@ function updateGraph() {
  * @returns {number} - The frequency.
  */
 function getFrequencyHSN(timeSlot, phoneIndex) {
-    if (hsn === 0) {
+    if (hsnValue === 0) {
         return (timeSlot + phoneIndex) % numberOfFrequencies + 1;
     } else {
-        const sequenceLength = numberOfFrequencies + hsn;
+        const sequenceLength = numberOfFrequencies + hsnValue;
         const sequenceIndex = (timeSlot - 1) % sequenceLength;
-        const seed = hsn * (phoneIndex + 1) * sequenceIndex;
+        const seed = hsnValue * (phoneIndex + 1) * sequenceIndex;
         return getPseudoRandom(seed) % numberOfFrequencies + 1;
     }
 }
