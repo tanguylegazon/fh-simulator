@@ -168,7 +168,7 @@ function createGraph(context, labels, data) {
 function createGraphLine(phoneIndex) {
     return {
         label: `Phone ${phoneIndex + 1}`,
-        data: [],
+        data: Array(Math.min(timeSlotCounter - 1, graphWindowSize)).fill(null),
         borderColor: getColor(phoneIndex),
         borderWidth: Math.ceil((phoneIndex + 1) / numberOfFrequencies) * 3.5,
         backgroundColor: changeLightness(getColor(phoneIndex), 15),
@@ -197,7 +197,6 @@ function updateSimulationParameters() {
  * Updates the graph every update interval when the simulation is playing.
  */
 function updateGraph() {
-    console.log(timeSlotCounter);
     clearInterval(intervalId);
     if (isPlaying) {
         intervalId = setInterval(updateGraphData, updateInterval);
@@ -250,6 +249,7 @@ function updateGraphData() {
     graph.update('none');
 
     ++timeSlotCounter;
+    console.log(timeSlotCounter);
 }
 
 /**
