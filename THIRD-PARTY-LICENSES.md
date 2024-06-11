@@ -1,6 +1,7 @@
 # License overview of included third-party projects
 
-This project includes third-party projects, which are licensed under their own respective licenses.
+This project is licensed under the terms of the [MIT License](LICENSE).
+However, this project includes third-party projects, which are licensed under their own respective licenses.
 
 ## Heroicons
 
