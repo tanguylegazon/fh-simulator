@@ -8,3 +8,6 @@
 *.njsproj
 *.sln
 *.sw?
+
+# Minified files
+*.min.*
