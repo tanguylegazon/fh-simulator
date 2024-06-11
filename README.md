@@ -37,7 +37,8 @@ To use this simulator, you can either:
 1. Access the live version at [tanguy-portfolio.com/simulator](https://tanguy-portfolio.com/simulator).
 2. Download the project files and open the `index.html` in your web browser.
 
-**Please note.** This project is not optimized for small screens (less than 1100px wide). For the best experience, please use a computer.
+**Please note.** This project is not optimized for small screens (less than 1100px wide). For the best experience,
+please use a computer.
 
 ### Functionality
 
@@ -54,8 +55,14 @@ To use this simulator, you can either:
 - [Nicolas](https://github.com/nic0c0)
 - [Tanguy](https://github.com/Eseltwift)
 
+## License and third-party licenses
+
+For information on the licenses of third-party projects included in this project, see
+the [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) file.
+
 ---
 
 <sup>1</sup> The Hopping Sequence Number (HSN) is a parameter used in frequency hopping systems to determine the
-sequence of frequency bands used by the system. In this simulator, the HSN determines the seed for a pseudo-random sequence
+sequence of frequency bands used by the system. In this simulator, the HSN determines the seed for a pseudo-random
+sequence
 of frequency bands.
