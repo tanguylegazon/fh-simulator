@@ -14,14 +14,14 @@ frequency bands.
 - Control of the hopping speed.
 - Real-time visualization of frequency hopping on a chart.
 
-## Technologies Used
+## Technologies used
 
 - **HTML** for page structure.
 - **CSS** for styling and layout.
 - **JavaScript** for application logic and user interactions.
     - **Chart.js** for graphical data visualization.
 
-## Project Files
+## Project files
 
 - `index.html`: The main project page.
 - `style.css`: CSS styles for layout and visual elements.
