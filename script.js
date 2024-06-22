@@ -295,7 +295,7 @@ function getFrequencyHSN(timeSlot, phoneIndex) {
         const sequenceLength = numberOfFrequencies + hsnValue;
         const sequenceIndex = (timeSlot - 1) % sequenceLength;
         const seed = hsnValue * (phoneIndex + 1) * sequenceIndex;
-        return getPseudoRandom(seed) % numberOfFrequencies + 1;
+        return (getPseudoRandom(seed) + phoneIndex) % numberOfFrequencies + 1;
     }
 }
 
