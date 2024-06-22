@@ -5,8 +5,7 @@ However, this project includes third-party projects, which are licensed under th
 
 ## Original Project
 
-This project is a fork of the [Frequency-Hopping-Project](https://github.com/cocoutbm/Frequency-Hopping-Project) by
-@cocoutbm.
+This project is a fork of the [Frequency-Hopping-Project](https://github.com/cocoutbm/Frequency-Hopping-Project).<br/>
 License type: MIT License<br/>
 License file: https://github.com/cocoutbm/Frequency-Hopping-Project/blob/main/LICENSE
 
