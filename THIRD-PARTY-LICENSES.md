@@ -9,7 +9,7 @@ This project is a fork of the [Frequency-Hopping-Project](https://github.com/coc
 License type: MIT License<br/>
 License file: https://github.com/cocoutbm/Frequency-Hopping-Project/blob/main/LICENSE
 
-## Heroicons
+## Heroicons v2.2.0
 
 License type: MIT License<br/>
-License file: https://github.com/tailwindlabs/heroicons/blob/master/LICENSE
+License file: https://github.com/tailwindlabs/heroicons/blob/v2.2.0/LICENSE
