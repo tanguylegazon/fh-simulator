@@ -3,7 +3,7 @@ However, this project includes third-party components, which are distributed und
 
 # List of third-party components
 
-- [cocoutbm's Frequency Hopping Simulator](#frequency-hopping-simulator) *(Original Project)*
+- [cocoutbm's Frequency Hopping Simulator](#frequency-hopping-simulator-original-project) *(Original Project)*
 - [Tailwind Labs' Heroicons v2.2.0](#heroicons-v220)
 
 # Licenses
