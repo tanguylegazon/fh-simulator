@@ -59,7 +59,7 @@ please use a computer.
 
 This project is licensed under the terms of the MIT License. For more information, see the [LICENSE](LICENSE) file.
 
-For information on the licenses of third-party components included in this project, see
+This project includes third-party components distributed under their own respective licenses. For information, see
 the [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) file.
 
 ---
