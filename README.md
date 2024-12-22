@@ -30,8 +30,8 @@ To use this simulator, you can either:
 1. Access the live version at [tanguy-portfolio.com/simulator](https://tanguy-portfolio.com/simulator).
 2. Clone this repository and open `index.html` in your web browser.
 
-**Please note.** This project is not optimized for small screens (less than 1100px wide). For the best experience,
-please use a computer.
+> **Note:** This project is not optimized for small screens (less than 1100px wide). Please use a desktop browser for
+> the best experience.
 
 ### Functionality
 
