@@ -1,4 +1,4 @@
-/*
+/*!
  * This file is licensed under the MIT License.
  * For more information, see https://github.com/tanguylegazon/fh-simulator/blob/main/LICENSE.
  */
