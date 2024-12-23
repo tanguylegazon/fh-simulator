@@ -41,10 +41,10 @@ To use this simulator, you can either:
 
 ## License and third-party licenses
 
-This project is licensed under the terms of the MIT License. For more information, see the [LICENSE](LICENSE) file.
+This project is licensed under the terms of the MIT License. See the [LICENSE](LICENSE) file for details.
 
-This project includes third-party components distributed under their own respective licenses. For information, see
-the [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) file.
+This project includes third-party components distributed under their own respective licenses. See
+the [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) file for details.
 
 ---
 
