@@ -11,7 +11,7 @@ However, this project includes third-party components, which are distributed und
 ## Frequency Hopping Simulator *(Original Project)*
 
 The [cocoutbm's Frequency Hopping Simulator](https://github.com/cocoutbm/Frequency-Hopping-Project/tree/bf0a2eee1213556ecb2e46f65491d8db206c5f86)
-project is licensed under the [MIT License](https://github.com/cocoutbm/Frequency-Hopping-Project/blob/bf0a2eee1213556ecb2e46f65491d8db206c5f86/LICENSE).
+project is licensed under the terms of the [MIT License](https://github.com/cocoutbm/Frequency-Hopping-Project/blob/bf0a2eee1213556ecb2e46f65491d8db206c5f86/LICENSE).
 
 ```text
 MIT License
@@ -40,7 +40,7 @@ SOFTWARE.
 ## Heroicons v2.2.0
 
 The [Tailwind Labs' Heroicons v2.2.0](https://github.com/tailwindlabs/heroicons/tree/v2.2.0) project is licensed under
-the [MIT License](https://github.com/tailwindlabs/heroicons/blob/v2.2.0/LICENSE).
+the terms of the [MIT License](https://github.com/tailwindlabs/heroicons/blob/v2.2.0/LICENSE).
 
 ```text
 MIT License
