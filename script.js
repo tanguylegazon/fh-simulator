@@ -92,7 +92,8 @@ function initialize() {
 function startSimulation() {
     const context = document.getElementById('graph').getContext('2d');
     const graphData = [];
-    const graphLabels = Array.from({length: graphWindowSize}, (_, i) => i + timeSlotCounter);
+    const graphLabels =
+        Array.from({length: graphWindowSize}, (_, i) => i + timeSlotCounter);
 
     // Create a graph line for each phone
     for (let phoneIndex = 0; phoneIndex < numberOfPhones; ++phoneIndex) {
@@ -187,7 +188,8 @@ function updateSimulationParameters() {
     numberOfPhones = parseInt(numberPhonesInput.value);
     numberOfFrequencies = parseInt(numberFrequenciesInput.value);
     simulationSpeed = parseFloat(speedSlider.value) || 0.5;
-    hsnValue = (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
+    hsnValue =
+        (hsn.value === '' ? 0 : parseInt(hsn.value)) < 0 ? 0 : (hsn.value === '' ? 0 : parseInt(hsn.value)) > 63 ? 63 : (hsn.value === '' ? 0 : parseInt(hsn.value));
     updateInterval = defaultUpdateInterval / simulationSpeed;
 
     // Update the displayed values
