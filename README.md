@@ -19,7 +19,7 @@ frequency bands.
 - `index.html`: The main project page.
 - `style.css`: CSS styles for layout and visual elements.
 - `script.js`: JavaScript script for application logic.
-- `img/`: Directory containing images used in the project.
+- `assets/`: Directory containing images and icons used in the project.
 
 ## Usage
 
