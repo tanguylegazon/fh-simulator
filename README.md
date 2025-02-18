@@ -27,7 +27,7 @@ frequency bands.
 
 To use this simulator, you can either:
 
-1. Access the live version at [tanguy-portfolio.com/simulator](https://tanguy-portfolio.com/simulator).
+1. Access the live version at [tanguy-bonandrini.fr/simulator](https://tanguy-bonandrini.fr/simulator).
 2. Clone this repository and open `index.html` in your web browser.
 
 > **Note:** This project is not optimized for small screens (less than 1100px wide). Please use a desktop browser for
