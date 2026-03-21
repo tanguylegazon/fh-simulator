@@ -1,5 +1,5 @@
 /*!
- * This Software is licensed under the terms of the  MIT License.
+ * This material is licensed under the terms of the MIT License.
  * A copy of the license is available at https://github.com/tanguylegazon/fh-simulator/blob/main/LICENSE.
  */
 
