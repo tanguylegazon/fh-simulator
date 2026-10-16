@@ -49,5 +49,6 @@ This project includes third-party materials, which are distributed under their o
 ---
 
 <sup>1</sup> The Hopping Sequence Number (HSN) is a parameter used in frequency hopping systems to determine the
-sequence of frequency bands used by the system. In this simulator, the HSN determines the seed for a pseudo-random
-sequence of frequency bands.
+sequence of frequency bands used by the system. This simulator uses a simplified model, not the GSM hopping algorithm:
+HSN 0 cycles through the bands; other values seed a deterministic shuffle at each time slot. Phones receive distinct
+bands when enough bands are available.

@@ -299,10 +299,14 @@ function getFrequencyHSN(timeSlot, phoneIndex) {
     if (hsnValue === 0) {
         return (timeSlot + phoneIndex) % numberOfFrequencies + 1;
     } else {
-        const sequenceLength = numberOfFrequencies + hsnValue;
-        const sequenceIndex = (timeSlot - 1) % sequenceLength;
-        const seed = hsnValue * sequenceIndex;
-        return (getPseudoRandom(seed) + phoneIndex) % numberOfFrequencies + 1;
+        const frequencies = Array.from({length: numberOfFrequencies}, (_, i) => i + 1);
+        let seed = getPseudoRandom(timeSlot ^ Math.imul(hsnValue, 0x9e3779b9));
+        for (let i = frequencies.length - 1; i > 0; --i) {
+            seed = getPseudoRandom(seed + 0x9e3779b9);
+            const index = Math.floor(seed / 4294967296 * (i + 1));
+            [frequencies[i], frequencies[index]] = [frequencies[index], frequencies[i]];
+        }
+        return frequencies[phoneIndex % numberOfFrequencies];
     }
 }
 
@@ -310,10 +314,12 @@ function getFrequencyHSN(timeSlot, phoneIndex) {
  * Generates a pseudo-random number based on a seed.
  * CAUTION: This function is not cryptographically secure.
  * @param seed - The seed which generates the pseudo-random number.
- * @returns {number} - A pseudo-random number between 0 and 2147483646.
+ * @returns {number} - A pseudo-random number between 0 and 4294967295.
  */
 function getPseudoRandom(seed) {
-    return (1103515245 * seed + 12345) % 2147483647;
+    seed = Math.imul(seed ^ (seed >>> 16), 0x85ebca6b);
+    seed = Math.imul(seed ^ (seed >>> 13), 0xc2b2ae35);
+    return (seed ^ (seed >>> 16)) >>> 0;
 }
 
 /**
